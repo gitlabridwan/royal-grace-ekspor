@@ -1,5 +1,0 @@
-Three.js 0.187.0
-Source: https://registry.npmjs.org/three/-/three-0.187.0.tgz
-License: MIT (see LICENSE)
-OrbitControls import specifier changed from three to ./three.module.js for buildless local hosting.
-No external CDN is required by the 3D viewer.
