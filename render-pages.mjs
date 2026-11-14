@@ -12,7 +12,7 @@ const phone = `https://wa.me/${company.whatsapp}`;
 const email = `mailto:${company.email}`;
 const profile = 'assets/royal-grace-company-profile.pdf';
 const mark = 'assets/editorial/royal-grace-mark.webp';
-const landscape = 'assets/reference/home-banner.webp';
+const landscape = 'assets/editorial/rice-terraces.webp';
 const escape = value => String(value).replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 })[character]);
@@ -21,12 +21,11 @@ const nicePath = (product, base) => `${base}products/${productPages[product.id].
 const photo = (base, path, alt, attributes = 'loading="lazy" decoding="async"') =>
   `<img src="${base}${path}" alt="${escape(alt)}" ${attributes}>`;
 const editorial = (base, file, alt, attributes) => photo(base, `assets/editorial/${file}.webp`, alt, attributes);
-const reference = (base, file, alt, attributes) => photo(base, `assets/reference/${file}.webp`, alt, attributes);
-const alternatives = { vanilla: 'premium-vanilla-beans-grade-a', coffee: 'indonesian-robusta-coffee-grade-a', carbon: 'coconut-based-activated-carbon', sulfur: 'natural-sulfur-99-8', broom: 'coconut-palm-broomstick', candlenut: 'premium-dried-candlenut' };
 const quote = (base, product) => `${base}contact/${product ? `?product=${encodeURIComponent(product.id)}` : ''}#inquiry`;
 const action = (href, label, style = '', graphic = '') =>
   `<a class="btn ${style}" href="${href}">${label}${graphic ? icon(graphic) : ''}</a>`;
 const options = [['all', 'All products'], ['agri', 'Food &amp; Agriculture'], ['industrial', 'Industrial'], ['craft', 'Natural Fibers']];
+const category = { agri: 'Food & Agriculture', industrial: 'Industrial', craft: 'Natural Fibers' };
 const icons = {
   arrow: '<path d="M4 12h15m-6-6 6 6-6 6"/>',
   chevron: '<path d="m9 5 7 7-7 7"/>',
@@ -54,83 +53,50 @@ const sprite = `<svg xmlns="http://www.w3.org/2000/svg" class="sprite" aria-hidd
 ${Object.entries(icons).map(([key, paths]) => `  <symbol id="i-${key}" viewBox="0 0 24 24">${paths}</symbol>`).join('\n')}
 </defs></svg>`;
 
-function brand(base, { variant = 'home', footer = false } = {}) {
-  const labels = {
-    home: 'Export · Import · Commodities', products: 'Export · Natural · Premium', vanilla: 'Export · Agriculture · Spices',
-    coffee: 'Export · Coffee · Sustainable', carbon: 'Export &amp; Supplier · Indonesia', sulfur: 'Export · Supply · Quality',
-    broom: 'Export &amp; Manufacture · Natural Palm Products', candlenut: 'Natural Indonesian Export'
-  };
-  const design = ['about', 'products', 'vanilla', 'coffee', 'carbon', 'sulfur', 'broom', 'candlenut'].includes(variant) ? variant : 'home';
+function brand(base, footer = false) {
   return `<a class="brand${footer ? ' footer-brand' : ''}" href="${base}" aria-label="${name} home">
-    ${reference(base, `${design}-mark`, '', 'width="86" height="92"')}
-    <span class="brand-name"><strong>${name}</strong>${design === 'about' && !footer ? '' : `<span class="brand-line">${footer ? 'Royal in Quality. Graceful in Service.' : labels[design]}</span>`}</span>
+    ${photo(base, mark, '', 'width="62" height="72"')}
+    <span><strong>${name}</strong><span class="brand-line">${footer ? 'Royal in Quality. Graceful in Service.' : 'Export · Import · Commodities'}</span></span>
   </a>`;
 }
 
-function header(base, page, variant) {
-  const links = {
-    home: [base, 'Home'], about: [`${base}about/`, page === 'about' ? 'About Us' : 'About'],
-    products: [`${base}products/`, 'Products'], why: [`${base}#why`, 'Why Us'],
-    quality: [`${base}export/#quality`, 'Quality'], sustainability: [`${base}about/#sustainability`, 'Sustainability'],
-    export: [`${base}export/`, 'Export'], contact: [`${base}contact/`, 'Contact']
-  };
-  const layouts = {
-    home: ['home', 'about', 'products', 'why', 'export', 'contact'],
-    about: ['home', 'about', 'products', 'sustainability', 'contact'],
-    products: ['about', 'products', 'sustainability', 'export', 'contact'],
-    vanilla: ['home', 'products', 'about', 'quality', 'sustainability', 'contact'],
-    coffee: ['home', 'products', 'about', 'quality', 'contact'],
-    carbon: ['home', 'products', 'about', 'sustainability', 'contact'],
-    sulfur: ['home', 'products', 'about', 'sustainability', 'contact'],
-    broom: ['home', 'products', 'about', 'sustainability', 'contact'],
-    candlenut: ['home', 'products', 'about', 'sustainability', 'contact']
-  };
-  const section = page === 'product' ? 'products' : page;
-  const current = layouts[variant] || layouts.home;
-  const style = { products: 'btn-outline', about: 'btn-green', home: 'btn-green' }[variant] || 'btn-gold';
-  return `<header class="site-header header-${variant}">
+function header(base, page) {
+  const nav = [
+    ['home', base, 'Home'], ['about', `${base}about/`, 'About'], ['products', `${base}products/`, 'Products'],
+    ['why', `${base}#why`, 'Why Us'], ['export', `${base}export/`, 'Export'], ['contact', `${base}contact/`, 'Contact']
+  ];
+  return `<header class="site-header">
     <div class="container header-inner">
-      ${brand(base, { variant })}
-      <div class="header-controls">
-        <nav class="site-nav" id="siteNav" aria-label="Main navigation">
-          ${current.map(key => `<a href="${links[key][0]}"${section === key ? ' aria-current="page"' : ''}>${links[key][1]}</a>`).join('\n          ')}
-        </nav>
-        ${action(quote(base), variant === 'products' ? 'Get a Quote' : 'Get Quote', `${style} header-quote`, variant === 'home' ? 'arrow' : '')}
-        <button id="menuToggle" class="icon-button menu-toggle" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Open navigation" hidden>${icon('menu')}${icon('close')}</button>
-      </div>
+      ${brand(base)}
+      <nav class="site-nav" id="siteNav" aria-label="Main navigation">
+        ${nav.map(([key, href, label]) => `<a href="${href}"${page === key ? ' aria-current="page"' : ''}>${label}</a>`).join('\n        ')}
+      </nav>
+      ${action(quote(base), 'Get Quote', 'btn-green header-quote', 'arrow')}
+      <button id="menuToggle" class="icon-button menu-toggle" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Open navigation" hidden>${icon('menu')}${icon('close')}</button>
     </div>
   </header>`;
 }
 
-function footer(base, variant, short = false, productId = '') {
-  const companyWidth = variant === 'home';
-  const isVanilla = variant === 'vanilla';
-  return `<footer class="site-footer footer-${variant}">
-    ${isVanilla ? `<section class="vanilla-contact" aria-labelledby="vanillaContact"><div class="container">
-      <h2 id="vanillaContact">Contact Us</h2><p>We’re here to assist with bulk orders, samples and export inquiries.</p>
-      <div class="vanilla-contact-options">
-        <a href="${phone}" target="_blank" rel="noopener">${icon('phone')}<span><strong>WhatsApp</strong>${company.phoneDisplay}</span></a>
-        <a href="${base}contact/#contact">${icon('pin')}<span><strong>Head Office</strong>${company.location}</span></a>
-        <a href="${email}">${icon('mail')}<span><strong>Email</strong>${company.email}</span></a>
+function footer(base, short = false) {
+  return `<footer class="site-footer">
+    ${short ? '' : `<div class="container footer-top">
+      <div class="footer-identity">${brand(base, true)}
+        <p>Indonesian natural commodities and industrial materials for international buyers.</p>
       </div>
-      ${action(quote(base, products.find(p => p.id === productId)), 'Request a Quote Now', 'btn-gold')}
-      <button type="button" class="vanilla-guide text-link" id="helpLauncher" aria-expanded="false" aria-controls="helpPanel">Export Guide</button>
-    </div></section>` : ''}
-    ${short || isVanilla ? '' : `<div class="container footer-top">
-      <div class="footer-identity">${brand(base, { variant, footer: true })}
-        <p>${companyWidth ? 'Exporting Indonesian natural commodities with a focus on quality and lasting partnerships.' : 'Indonesian natural commodities and industrial materials for international buyers.'}</p>
+      <div class="footer-column"><h2>Office</h2><p>${icon('pin')}${company.location}</p>
+        <a href="${base}${profile}" download>${icon('download')}Company Profile</a>
+        <button type="button" class="text-link" id="helpLauncher" aria-expanded="false" aria-controls="helpPanel">${icon('chat')}Export Guide</button>
       </div>
-      <div class="footer-column footer-office"><h2>${companyWidth ? 'Office' : 'Contact'}</h2><p>${companyWidth ? '' : icon('pin')}${company.location}</p>
-        ${companyWidth ? `<p>Business Hours: Mon–Sat, 08:00–17:00 WIB</p>` : `<a href="${phone}" target="_blank" rel="noopener">${icon('phone')}WhatsApp ${company.phoneDisplay}</a><a href="${email}">${icon('mail')}${company.email}</a>`}
-      </div>
-      <div class="footer-column footer-contact"><h2>${companyWidth ? 'Contact Us' : 'Export Information'}</h2>
-        ${companyWidth ? `<a href="${phone}" target="_blank" rel="noopener">WhatsApp ${company.phoneDisplay}</a><a href="${email}">${company.email}</a>` : `<a href="${base}export/#quality">Quality &amp; Documentation</a><a href="${base}${profile}" download>Company Profile</a>`}
-        <button type="button" class="text-link" id="helpLauncher" aria-expanded="false" aria-controls="helpPanel">Export Guide</button>
+      <div class="footer-column"><h2>Contact Us</h2>
+        <a href="${phone}" target="_blank" rel="noopener">${icon('phone')}WhatsApp ${company.phoneDisplay}</a>
+        <a href="${email}">${icon('mail')}${company.email}</a>
       </div>
     </div>`}
-    <div class="footer-bottom"><div class="container"><span>© <span id="year">${new Date().getUTCFullYear()}</span> ${name}. All rights reserved.</span>
-      <nav aria-label="Footer"><button type="button" data-policy="privacy">Privacy Policy</button><button type="button" data-policy="terms">Terms of Use</button>${short ? `<a href="${base}export/#quality">Quality &amp; Documentation</a><a href="${email}">${company.email}</a>` : ''}</nav>
-    </div></div>
+    <div class="footer-bottom">
+      <div class="container"><span>© <span id="year">${new Date().getUTCFullYear()}</span> ${name}</span>
+        <nav aria-label="Footer"><button type="button" data-policy="privacy">Privacy Policy</button><button type="button" data-policy="terms">Terms of Use</button>${short ? `<a href="${base}export/#quality">Quality &amp; Documentation</a><a href="${email}">${company.email}</a>` : ''}</nav>
+      </div>
+    </div>
   </footer>`;
 }
 
@@ -150,7 +116,7 @@ function sharedControls(base, shortFooter) {
   <div id="toast" class="toast" role="status"></div>`;
 }
 
-function shell({ path, base, page, title, description, main, social = landscape, shortFooter = false, variant = page, bodyStyle = '', productId = '', canonicalPath = path }) {
+function shell({ path, base, page, title, description, main, social = landscape, shortFooter = false }) {
   const schema = page === 'home' ? `<script type="application/ld+json">${JSON.stringify({
     '@context': 'https://schema.org', '@type': 'Organization', name, email: company.email,
     telephone: `+${company.whatsapp}`, address: { '@type': 'PostalAddress', addressLocality: 'Jakarta', addressCountry: 'ID' },
@@ -176,13 +142,13 @@ function shell({ path, base, page, title, description, main, social = landscape,
   <script src="${base}catalog-data.js" defer></script>
   <script src="${base}app.js" defer></script>
 </head>
-<body class="page-${page} design-${variant}${bodyStyle ? ` ${bodyStyle}` : ''}" data-root="${base}" data-path="${path}" data-canonical="${canonicalPath}" data-social="${social}">
+<body class="page-${page}" data-root="${base}" data-path="${path}" data-social="${social}">
   <a href="#main" class="skip">Skip to content</a>
-  ${header(base, page, variant)}
+  ${header(base, page === 'product' ? 'products' : page)}
   <main id="main">
 ${main}
   </main>
-  ${footer(base, variant, shortFooter, productId)}
+  ${footer(base, shortFooter)}
   ${sharedControls(base, shortFooter)}
   ${sprite}
 </body>
@@ -190,11 +156,12 @@ ${main}
 `;
 }
 
-function scenery(base, { title, description, subtitle = '', actions = '', variant = '', background = 'about-banner', id = '' }) {
-  return `<section class="scenery ${variant}"${id ? ` id="${id}"` : ''}>
-    ${reference(base, background, '', 'fetchpriority="high"')}
-    <div class="container scenery-content"><h1>${title}</h1>${subtitle ? `<p class="scenery-subtitle">${subtitle}</p>` : ''}<p>${description}</p>${actions ? `<div class="actions">${actions}</div>` : ''}</div>
-  </section>`;
+function scenery(base, { title, description, actions = '', variant = '', id = '', tag = 'section' }) {
+  return `<${tag} class="scenery ${variant}"${id ? ` id="${id}"` : ''}>
+    ${editorial(base, 'rice-terraces', '', 'width="1900" height="706" fetchpriority="high"')}
+    ${variant === 'home-hero' ? '<div class="hero-waves" aria-hidden="true"></div>' : ''}
+    <div class="container scenery-content"><h1>${title}</h1><p>${description}</p>${actions ? `<div class="actions">${actions}</div>` : ''}</div>
+  </${tag}>`;
 }
 
 const titles = {
@@ -212,44 +179,41 @@ const descriptions = {
 
 function home(base) {
   return `  ${scenery(base, {
-    title: 'Bridging Nations Enriching Lives',
-    description: 'Premium Indonesian Commodities From Indonesia To The World.',
-    variant: 'home-hero', background: 'home-banner', id: 'home',
-    actions: action(`${base}products/`, 'Explore Products', 'btn-gold') + action(`${base}contact/`, 'Contact Us', 'btn-light', 'chat')
+    title: 'Bridging Nations, Enriching Lives',
+    description: 'Premium Indonesian Commodities. From Indonesia to the World.',
+    variant: 'home-hero', id: 'home',
+    actions: action(`${base}products/`, 'Explore Products', 'btn-gold', 'arrow') + action(`${base}contact/`, 'Contact Us', 'btn-light', 'chat')
   })}
   <section class="trust-strip" aria-label="Sourcing priorities">
-    <ul class="container"><li>${icon('plus')} Indonesian Origin</li><li>Quality &amp; Responsible Sourcing</li><li>Reliable Global Logistics</li></ul>
+    <ul class="container"><li>${icon('leaf')} Sourced in Indonesia</li><li>${icon('shield')} Batch Quality &amp; Testing</li><li>${icon('globe')} Global Export Support</li></ul>
   </section>
   <section class="home-portfolio container" aria-labelledby="homeProducts">
-    <div class="section-heading center"><h2 id="homeProducts">Our Products</h2><p>Sourced from Indonesia’s finest producers, delivered to the world with quality and trust</p></div>
+    <div class="section-heading center"><h2 id="homeProducts">Our Products</h2><p>From Indonesian farms and producers to buyers around the world.</p></div>
     <div class="home-columns">
-      <div class="home-selection">
-        <div class="mini-grid">
-          ${[
-            ['vanilla', 'Vanilla', 'Premium Vanilla Beans · Natural Flavor · Food Grade'],
-            ['coffee', 'Robusta Coffee', 'Robusta Beans · Full Body · Indonesian Origin'],
-            ['carbon', 'Activated Carbon', 'Granules, Powder & Pellets · Industrial Filtration'],
-            ['sulfur', 'Sulfur', 'Industrial Sulfur · Agricultural & Chemical Uses'],
-            ['broom', 'Broomstick', 'Handcrafted Palm Broomstick · Household Cleaning']
-          ].map(([id, label, summary]) => `<a class="mini-card mini-${id}" href="${nicePath(products.find(p => p.id === id), base)}">
-            ${reference(base, `icon-${id}`, '')}<h3>${label}</h3><p>${escape(summary)}</p><span>View Details ${icon('arrow')}</span>
-          </a>`).join('\n          ')}
-        </div>
-        <section class="why-panel" id="why" aria-labelledby="whyHeading">
-          <h2 id="whyHeading">Why Choose Us</h2>
-          <ul>
-            <li>${icon('globe')}<h3>Global Export</h3><p>Export coordination, shipping and documentation for international buyers.</p><a class="text-link" href="${base}export/#solutions">View Details ${icon('arrow')}</a></li>
-            <li>${icon('shield')}<h3>Quality Selection</h3><p>Product selection, agreed specifications and relevant batch documentation.</p><a class="text-link" href="${base}export/#quality">View Details ${icon('arrow')}</a></li>
-            <li>${icon('leaf')}<h3>Sustainable Sourcing</h3><p>Working with local farmers and producers across Indonesia.</p><a class="text-link" href="${base}about/#sustainability">View Details ${icon('arrow')}</a></li>
-          </ul>
-        </section>
+      <div class="mini-grid">
+        ${products.map(p => {
+          const view = productPages[p.id];
+          return `<a class="mini-card" href="${nicePath(p, base)}">
+            <div class="catalog-thumb">${editorial(base, `card-${p.id}`, '')}</div>
+            <h3>${view.label}</h3><span>View details ${icon('arrow')}</span>
+          </a>`;
+        }).join('\n        ')}
       </div>
+      <section class="why-panel" id="why" aria-labelledby="whyHeading">
+        <h2 id="whyHeading">Why Choose Us</h2>
+        <ul>
+          <li>${icon('globe')}<div><h3>Global Export</h3><p>Packaging, documents and shipment coordination.</p></div></li>
+          <li>${icon('shield')}<div><h3>Quality Selection</h3><p>Samples, agreed specifications and batch testing.</p></div></li>
+          <li>${icon('leaf')}<div><h3>Local Sourcing</h3><p>We work with Indonesian farmers and producers.</p></div></li>
+        </ul>
+        <a class="text-link" href="${base}export/">View export services ${icon('arrow')}</a>
+      </section>
       <aside class="home-note" aria-labelledby="homeNoteHeading">
+        <p class="note-motif" aria-hidden="true">✧</p>
         <h2 id="homeNoteHeading">Our Commitment</h2>
-        <p class="home-note-intro">Partnerships for global sourcing</p>
-        ${icon('document')}
-        <blockquote>“We deliver not only goods, but trust that you can rely on.”</blockquote>
-        <a class="text-link" href="${base}about/">PT Royal Grace Exportindo</a>
+        <blockquote>Royal in Quality.<br>Graceful in Service.</blockquote>
+        <p>We help buyers agree on product quality, packaging and documents before shipment.</p>
+        <a class="text-link" href="${base}about/">About Royal Grace ${icon('arrow')}</a>
       </aside>
     </div>
   </section>`;
@@ -257,29 +221,26 @@ function home(base) {
 
 function catalog(base) {
   return `  ${scenery(base, {
-    title: 'Our Products —<br>Premium Natural Commodities', background: 'catalog-banner',
-    description: 'Sourced ethically from Indonesia. Export-quality natural commodities trusted worldwide.', variant: 'catalog-hero'
+    title: 'Our Products<br>Premium Natural Commodities',
+    description: 'Indonesian ingredients, industrial materials and natural fibers for export.', variant: 'catalog-hero'
   })}
   <section class="catalog container" id="products" aria-labelledby="catalogHeading">
     <div class="catalog-toolbar">
-      <div><h2 id="catalogHeading">Products Overview</h2><p id="productCount" role="status">Showing ${products.length} products</p></div>
-      <details class="catalog-find" id="catalogFind" hidden>
-        <summary>${icon('search')} Search &amp; Filter</summary>
-        <div class="catalog-controls" id="catalogControls">
-          <div class="filter-group" role="group" aria-label="Product category">
-            ${options.map(([key, label]) => `<button type="button" data-filter="${key}" aria-pressed="${key === 'all'}">${label}</button>`).join('')}
-          </div>
-          <div class="search">${icon('search')}<input id="productSearch" type="search" placeholder="Search products" aria-label="Search products"></div>
+      <div><h2 id="catalogHeading">Products Overview</h2><p id="productCount" role="status">Showing all ${products.length} products</p></div>
+      <div class="catalog-controls" id="catalogControls" hidden>
+        <div class="filter-group" role="group" aria-label="Product category">
+          ${options.map(([key, label]) => `<button type="button" data-filter="${key}" aria-pressed="${key === 'all'}">${label}</button>`).join('')}
         </div>
-      </details>
+        <div class="search">${icon('search')}<input id="productSearch" type="search" placeholder="Search products" aria-label="Search products"></div>
+      </div>
     </div>
     <div class="product-grid" id="productGrid">
       ${products.map(p => {
         const view = productPages[p.id];
         return `<article class="catalog-card" data-product="${p.id}">
           <a href="${nicePath(p, base)}" class="catalog-thumb" aria-label="View ${escape(view.label)}">${editorial(base, `card-${p.id}`, '')}</a>
-          <h3><a href="${nicePath(p, base)}">${p.id === 'broom' ? 'Broomstick' : escape(view.label)}</a></h3><p>${escape(view.summary)}</p>
-          <div class="card-actions">${action(nicePath(p, base), 'View Detail', 'btn-outline')}${action(quote(base, p), 'Get Quote', 'btn-gold')}</div>
+          <h3><a href="${nicePath(p, base)}">${view.label}</a></h3><p>${view.summary}</p>
+          <div class="card-actions">${action(nicePath(p, base), 'View Details', 'btn-outline')}${action(quote(base, p), 'Get Quote', 'btn-gold')}</div>
         </article>`;
       }).join('\n      ')}
     </div>
@@ -289,148 +250,87 @@ function catalog(base) {
 
 function about(base) {
   return `  ${scenery(base, {
-    title: 'About Us', subtitle: 'Growing Excellence. Delivering Trust Worldwide.',
-    description: 'PT Royal Grace Exportindo brings Indonesian agricultural products to the global market with a focus on quality and sustainable sourcing.',
+    title: 'About Us',
+    description: 'Connecting Indonesian farmers and producers with buyers around the world.',
     variant: 'about-hero',
-    actions: action('#our-story', 'Our Story', 'btn-green') + `<a class="btn btn-light" href="${base}${profile}" download>Download Company Profile</a>`
+    actions: action('#our-story', 'Our Story', 'btn-gold') + `<a class="btn btn-light" href="${base}${profile}" download>${icon('download')}Download Company Profile</a>`
   })}
   <section class="about container" id="our-story" aria-labelledby="storyHeading">
     <div class="story-grid">
       <div><h2 id="storyHeading">Our <span class="gold-text">Story</span></h2>
-        <p>${name} began with a vision to bring the richness of Indonesian agriculture to the world. We work with local farmers and producers to source food ingredients, industrial materials and natural palm products for buyers across international markets.</p>
-        <p>Our team helps buyers define their product requirements, evaluate samples and prepare each order for export.</p>
+        <p>${name} works with Indonesian farmers and producers to source natural commodities for international buyers. Our portfolio includes food ingredients, industrial materials and natural palm fibers.</p>
+        <p>We work with buyers to define what they need, how they will evaluate the product and how it should be packed and prepared for export.</p>
       </div>
-      <figure class="story-image">${editorial(base, 'terraces-about', 'Rice terraces framed by an Indonesian highland valley', 'width="309" height="150"')}</figure>
+      <figure class="story-image">${editorial(base, 'terraces-about', 'Green rice terraces in an Indonesian highland valley', 'width="309" height="150"')}
+        <figcaption>${photo(base, 'assets/founder.webp', '', 'width="38" height="38" loading="lazy"')}<span><strong>Meyliana Wiranto</strong>Founder &amp; Owner</span></figcaption>
+      </figure>
     </div>
     <div class="about-columns">
       <div class="value-tiles" aria-label="Vision and values">
-        <article class="value-tile featured">${icon('globe')}<h3>Vision</h3><p>To be a trusted global exporter of Indonesian natural and industrial products.</p></article>
+        <article class="value-tile featured">${icon('globe')}<h3>Vision</h3><p>To be a trusted exporter of Indonesian natural and industrial products.</p></article>
         <article class="value-tile featured">${icon('leaf')}<h3>Mission</h3><p>Source and select products with local producers and support buyers through export.</p></article>
         <article class="value-tile">${icon('shield')}<h3>Quality</h3><p>Agree the specification and confirm quality through selection, samples and batch testing.</p></article>
-        <article class="value-tile" id="sustainability">${icon('leaf')}<h3>Sustainability</h3><p>Build lasting working relationships with farmers and producers across Indonesia.</p></article>
+        <article class="value-tile">${icon('ship')}<h3>Sustainability</h3><p>Build lasting working relationships with farmers and producers in Indonesia.</p></article>
       </div>
-      <figure class="about-map"><h3>Values</h3>${reference(base, 'trade-map', 'World map with regional labels for North America, Europe, the Middle East, East Asia and Southeast Asia', 'width="402" height="200" loading="lazy"')}</figure>
-      <section class="journey" aria-labelledby="journeyHeading"><header><h3 id="journeyHeading">Our Journey</h3><p>From local sourcing to global trade</p></header>
-        <ul><li>${icon('check')}<span><strong>Rich Natural Resources</strong>Fertile landscapes across the archipelago.</span></li>
-          <li>${icon('check')}<span><strong>Skilled Local Producers</strong>Generations of farming and craft expertise.</span></li>
-          <li>${icon('check')}<span><strong>Global Export Preparation</strong>Planning for the buyer’s specific market.</span></li></ul>
+      <figure class="about-map"><h3>From Indonesia to the World</h3>${editorial(base, 'indonesia-map', 'World map with Indonesia highlighted and Jakarta marked', 'width="1000" height="450" loading="lazy"')}<figcaption>${icon('pin')} ${company.location}</figcaption></figure>
+      <section class="journey" aria-labelledby="journeyHeading"><h3 id="journeyHeading">Our Supply Chain</h3>
+        <ul><li>${icon('check')}<span><strong>Indonesian Origins</strong>Commodities sourced through local farmers and producers.</span></li>
+          <li>${icon('check')}<span><strong>Product Selection</strong>Grades and samples discussed for the intended use.</span></li>
+          <li>${icon('check')}<span><strong>Export Preparation</strong>Packing, documentation and shipment planned with buyers.</span></li></ul>
       </section>
     </div>
   </section>
-  <div class="about-band"><div class="container">
-    <article><h3>Rooted in Indonesia</h3><p>Working with local farmers and producers.</p></article>
-    <article><h3>Product Selection</h3><p>Agreeing on quality, samples and specifications.</p></article>
-    <article class="about-commitment"><h3>Meet Our Commitment</h3><p>${icon('shield')} Quality &amp; Safety &nbsp; ${icon('leaf')} Local Sourcing</p></article>
-    <article><h3>International Buyers</h3><p>Packing, documentation and shipment coordination.</p></article>
-  </div></div>`;
+  <div class="about-band"><div class="container"><strong>Local Sourcing</strong><span></span><strong>Agreed Quality</strong><span></span><strong>Export Coordination</strong></div></div>`;
 }
 
-function productDetail(base, p, alternate = false) {
+function productDetail(base, p) {
   const view = productPages[p.id];
-  const areas = {
-    vanilla: { title: alternate ? 'Premium Vanilla Beans Grade A' : 'Premium Vanilla Beans', pill: 'Grade A', line: 'Aromatic · Rich Flavor · Premium Indonesian Vanilla',
-      description: 'Gourmet Grade A vanilla from Indonesia for culinary, fragrance and cosmetics applications.',
-      highlights: ['Indonesian Origin', 'Gourmet Grade A', 'Vacuum Packed'] },
-    coffee: { title: alternate ? 'Indonesian Robusta Coffee — Grade 1' : 'Indonesian Robusta Coffee Grade 1',
-      description: 'Premium Indonesian Robusta · Sumatra, Java, Flores & Lampung · Full-Bodied Flavor',
-      highlights: ['100% Robusta', 'Grade 1', 'Screen Size 16–18'] },
-    carbon: { title: 'Activated Carbon', line: 'High Adsorption',
-      description: 'Premium activated carbon for water treatment, air filtration and industrial adsorption.',
-      feature: ['carbon-feature', 'Reference image of granular activated carbon beside coconut shells'] },
-    sulfur: { title: 'Industrial Sulfur High Purity', pill: 'Sulfur · Industrial Grade',
-      line: 'Premium Industrial Sulfur', description: 'Available in lump, granule, powder and pastille form.',
-      highlights: ['99.92% in Tested Sample', 'Industrial Grade', 'Multiple Forms'],
-      feature: ['sulfur-feature', 'Yellow sulfur lumps'], secondary: ['sulfur-feature-2', 'Sulfur lumps on volcanic ground'] },
-    broom: { title: 'Natural Palm Broomstick', pill: 'Natural · Handcrafted · Palm Fiber', line: 'Handcrafted Eco-Friendly',
-      description: 'Traditional brooms made from natural palm midribs. Durable and practical for everyday cleaning in homes and gardens.',
-      highlights: ['Natural Palm Fiber', 'Handcrafted', 'Outdoor Cleaning'] },
-    candlenut: { title: 'Premium Dried Candlenut', line: 'Natural Culinary & Oil',
-      description: 'Dried Indonesian candlenuts for seasonings, spice pastes and oil processing.',
-      feature: ['candlenut-feature', 'Whole and shelled candlenuts in wooden bowls'] }
-  };
-  const copy = areas[p.id];
-  const variant = p.id;
-  const extras = `<div class="product-extras"><a class="text-link" href="#packing" data-product-dialog="packing">Packing &amp; Buyer Checklist</a><a class="text-link" href="#media" data-product-dialog="media">More Photos &amp; Videos</a>${alternate ? `<a class="text-link" href="${nicePath(p, base)}">Main Product Page</a>` : `<a class="text-link" href="${base}products/${alternatives[p.id]}/">Alternate Layout</a>`}</div>`;
-  const applications = (list = p.applications) => `<section class="ref-block ref-applications"><h2>Applications</h2><ul class="ref-list">${list.map(item => {
-    const [title, detail] = Array.isArray(item) ? item : [item, ''];
-    return `<li>${icon('check')}<span><strong>${escape(title)}</strong>${detail ? `<small>${escape(detail)}</small>` : ''}</span></li>`;
-  }).join('')}</ul></section>`;
-  const overview = `<section class="ref-block ref-overview"><h2>${p.id === 'vanilla' ? 'Product Overview' : 'Overview'}</h2><p>${escape(p.story[0])}</p></section>`;
-  const specifications = (kind = '') => `<section class="ref-block ref-specifications ${kind}" id="specifications"><h2>Specifications</h2>
-    <table class="spec-table"><thead><tr><th scope="col">Parameter</th><th scope="col">Specification</th></tr></thead>
-      <tbody>${p.specs.en.map(([key, value]) => `<tr><th scope="row">${escape(key)}</th><td>${escape(value)}</td></tr>`).join('')}</tbody>
-    </table><p class="spec-note">${p.id === 'carbon' || p.id === 'sulfur' ? 'Laboratory values apply to the tested sample. Request the relevant batch COA.' : 'Confirm the current product and order specifications with our team.'}</p>
-  </section>`;
-  const benefits = (items = view.benefits) => `<section class="ref-block ref-benefits"><h2>Benefits</h2><div class="ref-benefit-grid">${items.map(([symbol, title, detail]) => `<article>${icon(symbol)}<div><h3>${escape(title)}</h3><p>${escape(detail)}</p></div></article>`).join('')}</div></section>`;
-  const pics = (entries, heading = true, captions = false) => `<section class="ref-block ref-gallery">${heading ? '<h2>Gallery</h2>' : '<h2 class="sr-only">Gallery</h2>'}${gallery(base, entries.map(([file, alt]) => [`assets/reference/${file}.webp`, alt]), captions)}</section>`;
-  const quotePanel = (title = 'Request a Quote', detail = 'Contact us for pricing, samples, packing and shipping.', button = 'Get Quote Now') => `<section class="ref-quote"><h2>${title}</h2><p>${detail}</p>${action(quote(base, p), button, 'btn-gold')}</section>`;
-
-  const productGalleries = {
-    vanilla: [['vanilla-1', 'Cured vanilla pods tied with twine'], ['vanilla-2', 'Vanilla orchid flower'], ['vanilla-3', 'Illustrative vanilla pouch'], ['vanilla-4', 'Vanilla flower with cured pods']],
-    coffee: [['coffee-1', 'Ripe coffee cherries on the branch'], ['coffee-2', 'Coffee beans in a burlap sack'], ['coffee-3', 'Example 60 kg jute sacks'], ['coffee-4', 'Coffee farm in the highlands']],
-    carbon: [['carbon-1', 'Granular activated carbon'], ['carbon-2', 'Activated carbon and coconut shell'], ['carbon-3', 'Illustrative export bag for activated carbon']],
-    sulfur: [['sulfur-1', 'Yellow Sulfur Rocks'], ['sulfur-2', 'Illustrative Sulfur Bag'], ['sulfur-3', 'Sulfur Powder']],
-    broom: [['broom-1', 'Close-up of dried palm midribs'], ['broom-2', 'Tied palm broom bundles'], ['broom-3', 'Hand-tied natural palm broom']],
-    candlenut: [['candlenut-1', 'Shelled candlenuts in a wooden bowl'], ['candlenut-2', 'Candlenuts and candlenut oil']]
-  };
-
-  let content;
-  switch (p.id) {
-    case 'vanilla':
-      content = `<div class="container ref-product-grid vanilla-content"><div>${overview}${benefits()}${applications([['Food & Bakery', ''], ['Fragrance', ''], ['Cosmetics & Skincare', '']])}${extras}</div><div>${specifications('ref-spec-float')}${pics(productGalleries.vanilla)}</div></div>`;
-      break;
-    case 'coffee':
-      content = `<div class="container ref-product-grid coffee-content"><div>${overview}${specifications()}${extras}</div><div>${benefits()}${applications([['Roasting', 'For espresso blends and traditional coffee.'], ['Instant Coffee', 'For industrial instant coffee production.'], ['Food & Beverage Manufacturing', 'For coffee extracts and flavoring.']])}</div><aside class="coffee-aside"><h2>Product Details</h2><div class="coffee-pack">${reference(base, 'coffee-feature', 'Coffee beans in a jute bag', 'decoding="async"')}<div><h3>Packaging</h3><p>60 kg jute bag with PE liner</p></div></div>${quotePanel('Request a Quote', 'Contact us for pricing, MOQ and shipping options.')}${pics(productGalleries.coffee)}</aside></div>`;
-      break;
-    case 'carbon':
-      content = `<div class="container ref-product-grid carbon-content"><div>${overview}${specifications('ref-spec-head')}${extras}</div><div>${applications([['Water Purification', 'Liquid filtration and water treatment.'], ['Air Filtration', 'Air and gas purification.'], ['Industrial Adsorption', 'Discuss the media grade and target contaminant.']])}${benefits()}${pics(productGalleries.carbon, false)}</div></div>`;
-      break;
-    case 'sulfur':
-      content = `<div class="container ref-product-grid sulfur-content"><div>${specifications()}${extras}</div><div>${applications([['Agriculture', 'Agricultural inputs'], ['Chemical Industry', 'Chemical processing'], ['Manufacturing', 'Rubber production']])}${quotePanel('Interested in Our Sulfur?', 'Contact our team for samples, pricing and bulk export inquiries.')}</div><div>${benefits([...view.benefits, ['globe', 'Export Support', 'Discuss logistics and documentation.']])}${pics(productGalleries.sulfur, true, true)}</div></div>`;
-      break;
-    case 'broom':
-      content = `<div class="container ref-product-grid broom-content">${overview}<div>${specifications()}${extras}</div><div>${benefits()}</div>${pics(productGalleries.broom)}</div><div class="broom-quote-band">${quotePanel('Ready to Order in Bulk?', 'Contact us for wholesale inquiries, custom packing and export shipping.', 'Get Quote Now')}</div>`;
-      break;
-    case 'candlenut':
-      content = `<div class="container ref-product-grid candlenut-content"><div>${overview}${specifications()}${extras}</div><div>${applications([['Culinary', 'Traditional dishes, sauces and spice pastes'], ['Cooking Oil', 'Candlenut oil processing'], ['Ingredient Manufacturing', 'Discuss preferred kernel and oil grades']])}${benefits()}<div class="ref-block ref-gallery-title"><h2 id="candlenut-gallery">Gallery</h2></div></div></div>
-      <section class="candlenut-band" aria-labelledby="candlenut-gallery"><div class="container" data-gallery>${productGalleries.candlenut.map(([file, title]) => `<a class="band-photo" href="${base}assets/reference/${file}.webp" data-image aria-label="Enlarge ${escape(title)}">${reference(base, file, title)}</a>`).join('')}${quotePanel('Ready to Order Premium Dried Candlenut?', 'Contact us for pricing, sample requests and export details.', 'Get Quote')}</div></section>`;
-      break;
-  }
-  const heroPhoto = p.id === 'broom' && !alternate ? editorial(base, 'broom-palm', '', 'fetchpriority="high"') : reference(base, `${p.id}${alternate && !['sulfur', 'candlenut'].includes(p.id) ? '-alt' : ''}-banner`, '', 'fetchpriority="high"');
-  const highlights = copy.highlights ? `<ul class="hero-highlights">${copy.highlights.map(label => `<li>${icon('check')}${label}</li>`).join('')}</ul>` : '';
-  const feature = copy.feature ? `<figure class="ref-hero-feature">${reference(base, ...copy.feature, 'decoding="async"')}${p.id === 'sulfur' ? '<figcaption><strong>Sulfur</strong><span>Granule / Lump / Powder</span></figcaption>' : ''}${copy.secondary ? `<div class="feature-extra">${reference(base, ...copy.secondary)}</div>` : ''}</figure>` : '';
-  if (alternate) {
-    content = alternateProduct(p.id, { overview, specifications, benefits, applications, pics, extras, quotePanel, base, view });
-  }
-  const crumb = alternate ? `<nav class="ref-crumb" aria-label="Breadcrumb"><div class="container"><a href="${base}">Home</a>${icon('chevron')}<a href="${base}products/">Products</a>${icon('chevron')}<span aria-current="page">${escape(view.label)}</span></div></nav>` : '';
-  const showHero = !alternate || !['sulfur', 'candlenut'].includes(variant);
-  const alternateFeature = variant === 'carbon' ? `<aside class="alternate-highlights"><h2>Key Highlights</h2><ul class="ref-list"><li>${icon('check')} Granular, powder and pellet</li><li>${icon('check')} Sample test results available</li><li>${icon('check')} Grades by application</li></ul><a href="#specifications">Specifications</a></aside>` :
-    variant === 'broom' ? `<aside class="alternate-highlights">${specifications()}</aside>` : '';
-  return `  ${crumb}${showHero ? `<header class="ref-product-hero ref-hero-${p.id}">
-    ${heroPhoto}
-    <div class="container ref-hero-inner"><div class="ref-hero-copy">
-      ${copy.pill && p.id !== 'vanilla' ? `<span class="hero-pill">${copy.pill}</span>` : ''}
-      <h1>${copy.title}</h1>
-      ${copy.pill && p.id === 'vanilla' && !alternate ? `<span class="hero-pill">${copy.pill}</span>` : ''}
-      ${copy.line && !(alternate && variant === 'vanilla') ? `<p class="ref-product-line">${escape(copy.line)}</p>` : ''}
-      <p class="ref-product-deck">${escape(copy.description)}</p>
-      ${p.id === 'sulfur' ? highlights : ''}
-      <div class="actions">${action(quote(base, p), p.id === 'sulfur' ? 'Request Quote' : 'Get Quote', 'btn-gold', p.id === 'sulfur' ? 'arrow' : p.id === 'broom' ? 'chat' : '')}<a class="btn btn-light" href="${base}assets/specs/${view.slug}.pdf" download>${p.id === 'sulfur' ? 'Download Datasheet' : 'Download Spec Sheet'}</a></div>
-      ${p.id !== 'sulfur' ? highlights : ''}
-    </div>${alternate ? alternateFeature : feature}</div>
-  </header>` : ''}
-  ${content}
-  <dialog id="packing" class="dialog product-info-dialog" aria-labelledby="packingHeading">
-    <button type="button" class="icon-button dialog-close" data-close aria-label="Close buyer checklist">${icon('close')}</button>
-    <h2 id="packingHeading">Packaging &amp; Buyer Checklist</h2><p>${escape(p.packing)}</p><p>${escape(p.story[1])}</p><p>${escape(p.note.en)}</p>
-    <h3>What to Include in Your Inquiry</h3><ul>${p.questions.map(question => `<li>${escape(question)}</li>`).join('')}</ul>
-    <h3>From Requirements to Selection</h3><ol>${p.steps.map(step => `<li>${escape(step)}</li>`).join('')}</ol>
-  </dialog>
-  <dialog id="media" class="dialog product-info-dialog" aria-labelledby="productMediaHeading">
-    <button type="button" class="icon-button dialog-close" data-close aria-label="Close product media">${icon('close')}</button>
-    <h2 id="productMediaHeading">More Photos &amp; Videos</h2>${gallery(base, p.photos, true)}
-    <div class="video-grid product-videos">${p.videoIds.map(id => videoCard(base, videos.find(video => video.id === id))).join('')}</div>
-  </dialog>
+  return `  <nav class="breadcrumbs" aria-label="Breadcrumb"><div class="container">
+    <a href="${base}">Home</a>${icon('chevron')}<a href="${base}products/">Products</a>${icon('chevron')}<span aria-current="page">${escape(view.label)}</span>
+  </div></nav>
+  <header class="product-hero hero-${p.id}${view.feature ? ' has-feature' : ''}">
+    ${editorial(base, view.hero, '', 'fetchpriority="high"')}
+    <div class="container product-hero-inner">
+      <div class="product-hero-copy">
+        <p class="product-category">${escape(category[p.category])}</p>
+        <h1>${escape(view.title)}</h1><p>${escape(view.subtitle)}</p>
+        <div class="actions">${action(quote(base, p), 'Get Quote', 'btn-gold', 'arrow')}<a class="btn btn-light" href="${base}assets/specs/${view.slug}.pdf" download>${icon('download')}Download Spec Sheet</a></div>
+        <p class="product-highlight">${icon('check')}${escape(view.highlight)}</p>
+      </div>
+      ${view.feature ? `<figure class="hero-feature">${editorial(base, ...view.feature, 'decoding="async"')}</figure>` : ''}
+    </div>
+  </header>
+  <div class="container product-content ${p.id}-content">
+    <section class="product-block" id="overview"><h2>Overview</h2><p>${escape(p.story[0])}</p></section>
+    <section class="product-block" id="specifications"><h2>Specifications</h2>
+      <table class="spec-table"><thead><tr><th scope="col">Parameter</th><th scope="col">Specification</th></tr></thead>
+        <tbody>${p.specs.en.map(([key, value]) => `<tr><th scope="row">${escape(key)}</th><td>${escape(value)}</td></tr>`).join('')}</tbody>
+      </table><p class="spec-note">${escape(p.note.en)}</p>
+    </section>
+    <section class="product-block" id="applications"><h2>Applications</h2><ul class="application-list">${p.applications.map(application => `<li>${icon('check')}${escape(application)}</li>`).join('')}</ul></section>
+    <section class="product-block" id="benefits"><h2>Benefits</h2>
+      <div class="benefit-grid">${view.benefits.map(([symbol, heading, text]) => `<article class="benefit">${icon(symbol)}<div><h3>${escape(heading)}</h3><p>${escape(text)}</p></div></article>`).join('')}</div>
+    </section>
+    <section class="product-block" id="gallery"><h2>Gallery</h2>
+      ${gallery(base, view.gallery)}
+    </section>
+  </div>
+  <section class="product-quote" aria-label="Request a product quote">
+    <div class="container"><div><h2>Ready to Order ${escape(view.label)}?</h2><p>Ask about pricing, samples, packing and shipping.</p></div>${action(quote(base, p), 'Get Quote', 'btn-gold', 'arrow')}</div>
+  </section>
+  <div class="container buyer-extras">
+    <details>
+      <summary>Packaging &amp; Buyer Checklist</summary>
+      <div class="buyer-content"><div><h2>Packaging &amp; Preparation</h2><p>${escape(p.packing)}</p><p>${escape(p.story[1])}</p></div>
+      <div><h2>What to Include in Your Inquiry</h2><ul>${p.questions.map(question => `<li>${escape(question)}</li>`).join('')}</ul></div>
+      <div><h2>From Requirements to Selection</h2><ol>${p.steps.map(step => `<li>${escape(step)}</li>`).join('')}</ol></div></div>
+    </details>
+    <details id="media"><summary>More Photos &amp; Videos <small>${p.videoIds.length} ${p.videoIds.length === 1 ? 'video' : 'videos'}</small></summary>
+      ${gallery(base, p.photos)}
+      <div class="video-grid product-videos">${p.videoIds.map(id => videoCard(base, videos.find(video => video.id === id))).join('')}</div>
+    </details>
+    <a class="text-link" href="${base}products/">${icon('chevron')} All Products</a>
+  </div>
   <dialog id="galleryDialog" class="dialog gallery-dialog" aria-labelledby="galleryTitle">
     <div class="gallery-dialog-head"><h2 id="galleryTitle">Product Gallery</h2><button class="icon-button dialog-close" type="button" data-close aria-label="Close gallery">${icon('close')}</button></div>
     <figure><img id="galleryPhoto" alt=""><figcaption id="galleryCaption" aria-live="polite"></figcaption></figure>
@@ -438,23 +338,9 @@ function productDetail(base, p, alternate = false) {
   </dialog>`;
 }
 
-function alternateProduct(variant, { overview, specifications, benefits, applications, pics, extras, quotePanel, base, view }) {
-  const datasheet = `<a class="btn btn-outline" href="${base}assets/specs/${view.slug}.pdf" download>Download Spec Sheet</a>`;
-  const chipSpecs = (rows, title = 'Specifications') => `<section class="ref-block ref-spec-chips"><h2>${title}</h2><dl>${rows.map(([id, label, value]) => `<div>${icon(id)}<div><dt>${label}</dt><dd>${escape(value)}</dd></div></div>`).join('')}</dl></section>`;
-  const content = {
-    vanilla: () => `<div class="container ref-product-grid alt-vanilla-body"><div>${overview}${chipSpecs([['leaf','Moisture','25–35%'],['flask','Vanillin','1.5–2.5%'],['box','Grade A Length','15–20 cm']])}${benefits()}${applications([['Food',''],['Fragrance',''],['Cosmetics','']])}${extras}</div><aside class="alternate-vanilla-gallery">${pics([['vanilla-alt-gallery-1','Cured vanilla pods on burlap'],['vanilla-alt-gallery-2','Cured pods in a wooden scoop'],['vanilla-alt-gallery-3','Vanilla pods tied in a bundle'],['vanilla-alt-gallery-4','Vanilla orchid and pods']])}${quotePanel('Need a custom volume or packaging?', 'Ask about bulk orders, private labels and export documentation.')}</aside></div>`,
-    coffee: () => `<div class="container ref-product-grid alt-coffee-body"><div>${overview}${benefits()}${extras}</div><div class="alt-coffee-combined">${specifications()}${applications([['Roasting','Used in espresso blends and traditional coffee.'],['Instant Coffee','For industrial instant coffee processing.']])}${pics([['coffee-alt-1','Roasted coffee in a burlap sack'],['coffee-alt-2','Unroasted green coffee beans'],['coffee-alt-3','Roasted coffee beans']])}</div></div>`,
-    carbon: () => `<div class="container ref-product-grid alt-carbon-body">${overview}<div>${specifications()}${extras}</div><div>${benefits()}</div>${applications([['Water Treatment','Drinking water and wastewater treatment applications.'],['Air Purification','Odor control and gas purification.'],['Industrial Adsorption','Specify the target contaminant and performance requirements.']])}${quotePanel('Need a Bulk Quote or Technical Details?', 'Our team can assist with specifications, samples and shipping.')}</div>`,
-    sulfur: () => `<div class="container ref-product-grid alt-sulfur-body"><div><figure class="alt-hero-frame">${editorial(base, 'sulfur-crater','Illustrative Indonesian volcanic crater with sulfur deposits')}<figcaption>Indonesian Volcanic Landscape</figcaption></figure>${pics([['sulfur-alt-1','Yellow sulfur lumps'],['sulfur-alt-2','Yellow sulfur powder and illustrative package'],['sulfur-alt-3','Sulfur bearing rock']],false)}</div><div><header class="alt-detail-heading"><h1>Industrial Sulfur —<br> Tested High Purity</h1><span class="hero-pill">Industrial Quality · Export Supply</span></header>${overview}${chipSpecs([['check','Total Sulfur (Sample)','99.92%'],['flask','Moisture (Sample)','0.14%'],['box','Form','Granule · Lump · Powder']])}${benefits()}${applications([['Agriculture',''],['Chemical',''],['Manufacturing','']])}${quotePanel('Interested in pricing or bulk export?','Ask for price, samples and delivery details.')}${extras}${datasheet}</div></div>`,
-    broom: () => `<div class="container ref-product-grid alt-broom-body"><div>${overview}${benefits()}${applications([['Household & Garden',''],['Outdoor Cleaning',''],['Broom Manufacturing',''],['Natural-Fiber Products','']])}${extras}</div><div class="alt-broom-gallery">${pics([['broom-alt-1','Broom bristles tied with natural twine'],['broom-alt-2','Dried palm midribs'],['broom-alt-3','Tied palm brooms'],['broom-alt-4','Bundle of palm brooms']])}${quotePanel('Interested in Bulk Orders or Export Inquiry?', 'Get in touch for pricing, options and shipping.', 'Get Quote')}</div></div>`,
-    candlenut: () => `<div class="container ref-product-grid alt-candlenut-body"><div><header class="alt-detail-heading"><h1>Premium Dried Candlenut<br>Natural Culinary &amp; Oil</h1><p>Natural · Indonesian Origin · Whole and Shelled</p></header><figure class="alt-hero-frame">${editorial(base,'candlenut-trees','Candlenut trees in a plantation setting')}</figure>${overview}<div class="alt-candlenut-specs">${specifications()}${benefits()}</div>${extras}${datasheet}</div><div><figure class="alt-hero-frame">${reference(base,'candlenut-alt-feature','Shelled candlenuts in a wooden bowl')}</figure>${applications([['Culinary','Traditional dishes, sauces and spice pastes'],['Cooking Oil','Processing of candlenut oil'],['Ingredient Manufacturing','Discuss preferred kernel and oil grades']])}${pics([['candlenut-alt-1','Whole candlenuts in a fabric sack'],['candlenut-alt-2','Illustrative candlenut export bag'],['candlenut-alt-3','Candlenut oil and whole candlenuts']])}${quotePanel('Ready to Place Your Bulk Order?','Contact us for pricing, documentation and shipping.', 'Get Quote')}</div></div>`
-  };
-  return content[variant]();
-}
-
-function gallery(base, images, captions = true) {
-  return `<div class="photo-grid${captions ? '' : ' photo-grid-clean'}" data-gallery>
-    ${images.map(([image, caption]) => `<figure><a href="${base}${image}" data-image aria-label="Enlarge ${escape(caption)}">${photo(base, image, caption, captions ? 'loading="lazy" decoding="async"' : 'decoding="async"')}</a>${captions ? `<figcaption>${escape(caption)}</figcaption>` : ''}</figure>`).join('')}
+function gallery(base, images) {
+  return `<div class="photo-grid" data-gallery>
+    ${images.map(([image, caption]) => `<figure><a href="${base}${image}" data-image aria-label="Enlarge ${escape(caption)}">${photo(base, image, caption)}</a><figcaption>${escape(caption)}</figcaption></figure>`).join('')}
   </div>`;
 }
 
@@ -544,21 +430,14 @@ function contact(base) {
 
 const pages = [
   { path: '', base: './', page: 'home', main: home('./') },
-  { path: 'about/', base: '../', page: 'about', main: about('../'), social: 'assets/reference/about-banner.webp' },
-  { path: 'products/', base: '../', page: 'products', main: catalog('../'), shortFooter: true, social: 'assets/reference/catalog-banner.webp' },
-  { path: 'products/overview/', canonicalPath: 'products/', base: '../../', page: 'products', main: catalog('../../'), shortFooter: true, social: 'assets/reference/catalog-banner.webp' },
-  { path: 'about-us/', canonicalPath: 'about/', base: '../', page: 'about', main: about('../'), social: 'assets/reference/about-banner.webp' },
+  { path: 'about/', base: '../', page: 'about', main: about('../') },
+  { path: 'products/', base: '../', page: 'products', main: catalog('../'), shortFooter: true },
   { path: 'export/', base: '../', page: 'export', main: exportPage('../') },
   { path: 'contact/', base: '../', page: 'contact', main: contact('../') },
-  ...products.flatMap(product => {
+  ...products.map(product => {
     const view = productPages[product.id];
-    const common = { base: '../../', page: 'product', productId: product.id,
-      title: `${view.title} | ${name}`, description: view.subtitle, variant: product.id,
-      social: product.id === 'broom' ? 'assets/editorial/broom-palm.webp' : `assets/reference/${product.id}-banner.webp` };
-    return [
-      { ...common, path: `products/${view.slug}/`, main: productDetail('../../', product) },
-      { ...common, path: `products/${alternatives[product.id]}/`, canonicalPath: `products/${view.slug}/`, main: productDetail('../../', product, true), bodyStyle: 'alternate-layout' }
-    ];
+    return { path: `products/${view.slug}/`, base: '../../', page: 'product', main: productDetail('../../', product),
+      title: `${view.title} | ${name}`, description: view.subtitle, social: `assets/editorial/${view.hero}.webp` };
   })
 ];
 
