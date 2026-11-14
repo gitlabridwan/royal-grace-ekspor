@@ -1,8 +1,5 @@
 'use strict';
 
-// OPSIONAL: setelah GitHub Pages aktif, isi alamat website lengkap di sini.
-// Contoh: siteUrl: 'https://USERNAME.github.io/royal-grace-exportindo/'
-// Jika dikosongkan, alamat akan mengikuti lokasi website yang sedang dibuka.
 window.RGE_SITE_CONFIG = Object.freeze({
   siteUrl: ''
 });
