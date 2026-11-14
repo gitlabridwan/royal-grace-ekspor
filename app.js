@@ -81,6 +81,11 @@ Object.assign(translations.en, {
  allServices:'Explore all export services',productSlidePrev:'Previous products',productSlideNext:'Next products',catalogueLabel:'Product catalogue, scroll to explore',results:n=>`${n} ${n===1?'product':'products'} shown`
 });
 
+
+Object.assign(translations.id, {view3d:'Lihat 3D',view3dLabel:'Lihat bentuk produk dalam 3D',threeEyebrow:'JELAJAHI BENTUK PRODUK',threeTitle:'Lihat lebih dekat. Putar dari setiap sisi.',threeIntro:'Ilustrasi 3D interaktif untuk enam komoditas. Foto dan spesifikasi tetap tersedia untuk referensi.',threeStart:'Jelajahi 3D',threeLoading:'Menyiapkan penampil 3D…',threeFailed:'3D belum dapat dimuat. Buka melalui GitHub Pages atau server lokal; foto dan spesifikasi tetap tersedia.'});
+Object.assign(translations.en, {view3d:'View in 3D',view3dLabel:'Explore the product shape in 3D',threeEyebrow:'EXPLORE PRODUCT FORMS',threeTitle:'A closer look. Every angle.',threeIntro:'Interactive 3D illustrations of all six commodities. Reference photos and specifications remain available.',threeStart:'Explore in 3D',threeLoading:'Preparing the 3D viewer…',threeFailed:'3D could not load. Open via GitHub Pages or a local server; photos and specifications remain available.'});
+let productViewerModule=null,productViewerPromise=null;
+
 let lang='id',selected=new Set(),filter='all',currentProduct=null,currentArticle=null,currentPolicy=null,summaryText='',lastFocus=null,toastTimer;
 try{lang=localStorage.getItem('rge-language')==='en'?'en':'id';const saved=JSON.parse(localStorage.getItem('rge-products')||'[]');if(Array.isArray(saved)) selected=new Set(saved.filter(x=>products.some(p=>p.id===x)));}catch{}
 const t=key=>translations[lang][key]??key;
@@ -97,7 +102,7 @@ function renderProducts(){
  const query=$('#productSearch').value.toLocaleLowerCase().trim();
  const visible=products.filter(p=>(filter==='all'||p.category===filter)&&[p.name.id,p.name.en,p.description.id,p.description.en,p.origin.id,p.origin.en,p.tag.id,p.tag.en].join(' ').toLocaleLowerCase().includes(query));
  const track=$('#productGrid'),previous=track.scrollLeft;
- track.innerHTML=visible.map(p=>`<article class="product-card"><div class="product-photo"><button class="photo-trigger" data-detail="${p.id}" aria-label="${t('detail')}: ${p.name[lang]}"><img src="assets/${p.image}.webp" alt="${p.name[lang]} — ${t('reference')}" width="335" height="410" loading="lazy"></button></div><span class="product-category">${t(p.category)}</span><button class="product-add ${selected.has(p.id)?'selected':''}" data-toggle="${p.id}" aria-pressed="${selected.has(p.id)}" aria-label="${selected.has(p.id)?t('remove'):t('add')}: ${p.name[lang]}" title="${selected.has(p.id)?t('remove'):t('add')}">${icon(selected.has(p.id)?'check':'plus')}</button><div class="product-card-body"><div class="product-origin">${p.tag[lang]}</div><h3>${p.name[lang]}</h3><p>${p.description[lang]}</p><button class="text-link" data-detail="${p.id}"><span>${t('detail')}</span><span class="card-arrow">${icon('arrow-up')}</span></button></div></article>`).join('');
+ track.innerHTML=visible.map(p=>`<article class="product-card"><div class="product-photo"><button class="photo-trigger" data-detail="${p.id}" aria-label="${t('detail')}: ${p.name[lang]}"><img src="assets/${p.image}.webp" alt="${p.name[lang]} — ${t('reference')}" width="335" height="410" loading="lazy"></button></div><span class="product-category">${t(p.category)}</span><button class="product-add ${selected.has(p.id)?'selected':''}" data-toggle="${p.id}" aria-pressed="${selected.has(p.id)}" aria-label="${selected.has(p.id)?t('remove'):t('add')}: ${p.name[lang]}" title="${selected.has(p.id)?t('remove'):t('add')}">${icon(selected.has(p.id)?'check':'plus')}</button><div class="product-card-body"><div class="product-origin">${p.tag[lang]}</div><h3>${p.name[lang]}</h3><p>${p.description[lang]}</p><div class="product-card-actions"><button class="text-link" data-view3d="${p.id}" aria-label="${t('view3dLabel')}: ${p.name[lang]}"><span>${t('view3d')}</span><span class="card-arrow">${icon('cube')}</span></button><button class="product-spec-link" data-detail="${p.id}">${t('detail')}${icon('arrow-up')}</button></div></div></article>`).join('');
  track.hidden=!visible.length;
  track.scrollLeft=previous;
  track.setAttribute('aria-label',t('catalogueLabel'));
@@ -118,6 +123,7 @@ function toggleProduct(id,checked,quiet=false){
  const add=checked??!selected.has(id);
  add?selected.add(id):selected.delete(id);persist();renderProducts();renderRFQProducts();
  if($('#detailDialog').open&&currentProduct===id)renderDetail(id);
+ productViewerModule?.syncSelection();
  if(!quiet)toast(t(add?'addedToast':'removedToast'));
 }
 function renderServices(){$('#servicesGrid').innerHTML=services.map((s,i)=>`<article class="service"><div class="service-top">${icon(s.icon)}<span class="service-number">0${i+1}</span></div><h3>${s[lang][0]}</h3><p>${s[lang][1]}</p></article>`).join('');}
@@ -142,6 +148,7 @@ function applyLanguage(){
  $('[name="unit"]').setAttribute('aria-label',t('unitLabel'));
  $$('[data-close],#closeHelp').forEach(b=>b.setAttribute('aria-label',t('close')));
  $('#year').textContent=new Date().getFullYear();
+ productViewerModule?.setLanguage(lang);
  renderProducts();renderRFQProducts();renderServices();renderFaq();renderInsights();
  if($('#detailDialog').open)renderDetail(currentProduct);
  if($('#articleDialog').open){if(currentPolicy)renderPolicy(currentPolicy);else renderArticle(currentArticle);}
@@ -150,9 +157,22 @@ function applyLanguage(){
 function openDialog(el){lastFocus=document.activeElement;el.showModal();document.body.style.overflow='hidden';}
 function renderDetail(id){
  const p=products.find(p=>p.id===id);if(!p)return;currentProduct=id;
- $('#detailContent').innerHTML=`<div class="detail-content"><div class="detail-photo"><img src="assets/${p.image}.webp" alt="${p.name[lang]}"><span>${t('reference')}</span></div><div class="detail-body"><p class="eyebrow">${t(p.category).toUpperCase()} / ${p.origin[lang]}</p><h2 id="detailTitle">${p.name[lang]}</h2><p>${p.description[lang]}</p><table class="spec-table"><caption class="sr-only">${t('specifications')}</caption><tbody>${p.specs[lang].map(s=>`<tr><th scope="row">${s[0]}</th><td>${s[1]}</td></tr>`).join('')}</tbody></table><p class="spec-note">${p.note[lang]}</p><button class="btn ${selected.has(id)?'outline':''}" data-toggle="${id}">${icon(selected.has(id)?'check':'plus')}<span>${selected.has(id)?t('remove'):t('add')}</span></button></div></div>`;
+ $('#detailContent').innerHTML=`<div class="detail-content"><div class="detail-photo"><img src="assets/${p.image}.webp" alt="${p.name[lang]}"><span>${t('reference')}</span><button class="btn detail-3d-button" data-view3d="${p.id}">${icon('cube')}<span>${t('view3d')}</span></button></div><div class="detail-body"><p class="eyebrow">${t(p.category).toUpperCase()} / ${p.origin[lang]}</p><h2 id="detailTitle">${p.name[lang]}</h2><p>${p.description[lang]}</p><table class="spec-table"><caption class="sr-only">${t('specifications')}</caption><tbody>${p.specs[lang].map(s=>`<tr><th scope="row">${s[0]}</th><td>${s[1]}</td></tr>`).join('')}</tbody></table><p class="spec-note">${p.note[lang]}</p><button class="btn ${selected.has(id)?'outline':''}" data-toggle="${id}">${icon(selected.has(id)?'check':'plus')}<span>${selected.has(id)?t('remove'):t('add')}</span></button></div></div>`;
  $('#detailDialog').setAttribute('aria-labelledby','detailTitle');
 }
+async function openProduct3D(id){
+ if(!products.some(p=>p.id===id))return;
+ toast(t('threeLoading'));
+ try{
+  if(!productViewerPromise)productViewerPromise=import('./product-viewer.js').catch(error=>{productViewerPromise=null;throw error;});
+  productViewerModule=await productViewerPromise;
+  productViewerModule.openViewer({id,language:lang,bridge:{getProduct:key=>products.find(p=>p.id===key),getProducts:()=>products,isSelected:key=>selected.has(key),toggle:key=>toggleProduct(key),showSpecs:key=>{renderDetail(key);if(!$('#detailDialog').open)openDialog($('#detailDialog'));}}});
+  $('#toast').classList.remove('show');
+ }catch{
+  renderDetail(id);if(!$('#detailDialog').open)openDialog($('#detailDialog'));toast(t('threeFailed'));
+ }
+}
+
 function renderArticle(id){const a=articles.find(a=>a.id===id);if(!a)return;currentArticle=id;currentPolicy=null;$('#articleContent').innerHTML=`<p class="eyebrow">${a.category[lang]} · ${a.time} ${t('readTime')}</p><h2 id="articleTitle">${a.title[lang]}</h2>${a.body[lang]}<p class="source-note">${t('sourceNote')}</p><a class="text-link article-rfq" href="#inquiry">${t('prepareInquiry')}${icon('arrow-up')}</a>`;$('#articleDialog').setAttribute('aria-labelledby','articleTitle');}
 function renderPolicy(id){const p=policies[id];if(!p)return;currentPolicy=id;currentArticle=null;$('#articleContent').innerHTML=`<p class="eyebrow">ROYAL GRACE EXPORTINDO</p><h2 id="articleTitle">${p.title[lang]}</h2>${p.body[lang]}`;$('#articleDialog').setAttribute('aria-labelledby','articleTitle');}
 function buildSummary(){
@@ -169,6 +189,7 @@ $('#productSearch').addEventListener('input',()=>{$('#productGrid').scrollLeft=0
 $('#resetSearch').addEventListener('click',()=>{$('#productSearch').value='';$('#productGrid').scrollLeft=0;filter='all';$$('[data-filter]').forEach(b=>{b.classList.toggle('active',b.dataset.filter==='all');b.setAttribute('aria-pressed',String(b.dataset.filter==='all'));});renderProducts();$('#productSearch').focus();});
 document.addEventListener('keydown',e=>{if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)&&!$$('dialog').some(d=>d.open)){e.preventDefault();$('#productSearch').focus();$('#products').scrollIntoView();}if(e.key==='Escape'){$('#mobileNav').hidden=true;$('#menuToggle').setAttribute('aria-expanded','false');if(!$('#helpPanel').hidden){$('#helpPanel').hidden=true;$('#helpLauncher').setAttribute('aria-expanded','false');$('#helpLauncher').focus();}}});
 document.addEventListener('click',e=>{
+ const view3d=e.target.closest('[data-view3d]');if(view3d){openProduct3D(view3d.dataset.view3d);return;}
  const detail=e.target.closest('[data-detail]');if(detail){renderDetail(detail.dataset.detail);openDialog($('#detailDialog'));return;}
  const toggle=e.target.closest('[data-toggle]');if(toggle){const id=toggle.dataset.toggle;toggleProduct(id);const next=$(`#detailDialog[open] [data-toggle="${id}"]`)||$(`.product-add[data-toggle="${id}"]`);next?.focus({preventScroll:true});return;}
  const article=e.target.closest('[data-article]');if(article){renderArticle(article.dataset.article);openDialog($('#articleDialog'));return;}
@@ -179,7 +200,7 @@ document.addEventListener('click',e=>{
 });
 $('#rfqProducts').addEventListener('change',e=>{if(e.target.matches('input')){const id=e.target.value;toggleProduct(id,e.target.checked,true);$(`#rfqProducts input[value="${id}"]`)?.focus({preventScroll:true});}});
 $('#clearShortlist').addEventListener('click',()=>{selected.clear();persist();renderProducts();renderRFQProducts();toast(t('clearedToast'));});
-$$('dialog').forEach(d=>{d.addEventListener('close',()=>{document.body.style.overflow='';if(lastFocus?.isConnected)lastFocus.focus({preventScroll:true});});d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}});});
+$$('dialog').forEach(d=>{d.addEventListener('close',()=>{document.body.style.overflow=$$('dialog').some(el=>el.open)?'hidden':'';if(lastFocus?.isConnected)lastFocus.focus({preventScroll:true});});d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}});});
 $('#inquiryForm').addEventListener('submit',e=>{e.preventDefault();if(!selected.size){$('#productError').hidden=false;$('#rfqProducts input').focus();return;}summaryText=buildSummary();$('#rfqSummary').textContent=summaryText;$('#summaryDialog').setAttribute('aria-label',t('summaryTitle'));openDialog($('#summaryDialog'));});
 $('#downloadRFQ').addEventListener('click',()=>{const blob=new Blob(['\ufeff'+summaryText],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`Royal-Grace-RFQ-${new Date().toISOString().slice(0,10)}.txt`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast(t('downloadedToast'));});
 $('#copyRFQ').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(summaryText);toast(t('copiedToast'));}catch{toast(t('copyError'));}});

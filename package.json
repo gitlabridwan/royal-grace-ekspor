@@ -1,0 +1,7 @@
+{
+  "name": "royal-grace-exportindo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Static Royal Grace Exportindo website with a vendored Three.js product viewer. No installation or build required."
+}
