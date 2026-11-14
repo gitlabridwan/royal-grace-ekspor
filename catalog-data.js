@@ -784,3 +784,124 @@ window.RGE_DATA = {
     }
   ]
 };
+
+/* Presentation and reference imagery for the product pages. */
+window.RGE_DATA.productPages = {
+  vanilla: {
+    slug: 'premium-vanilla-beans',
+    title: 'Premium Vanilla Beans',
+    label: 'Vanilla',
+    summary: 'Indonesian vanilla with a sweet aroma for food, extracts and fragrance.',
+    subtitle: 'Indonesian vanilla for food, extracts and fragrance, with gourmet and extraction grades available.',
+    highlight: 'Gourmet Grade A and Extract Grade B',
+    hero: 'vanilla-grove',
+    gallery: [
+      ['assets/editorial/vanilla-pods.webp', 'Cured vanilla pods'],
+      ['assets/editorial/vanilla-flower.webp', 'Vanilla orchid flower'],
+      ['assets/vanilla.webp', 'Cured beans from the company profile']
+    ],
+    benefits: [
+      ['leaf', 'Sweet, rich aroma', 'Aromatic beans for food, extracts and fragrance.'],
+      ['check', 'Two grade options', 'Choose gourmet beans or an extraction grade.'],
+      ['box', 'Vacuum packing', 'The company profile lists 1 kg and 5 kg packs.']
+    ]
+  },
+  coffee: {
+    slug: 'robusta-coffee',
+    title: 'Indonesian Robusta Coffee',
+    label: 'Robusta Coffee',
+    summary: 'Full-bodied Indonesian Robusta for blends, espresso and instant coffee.',
+    subtitle: 'Full-bodied Robusta with a bold character and chocolate notes for blends and industrial coffee processing.',
+    highlight: 'Grade 1 · Screen size 16–18',
+    hero: 'coffee-hills',
+    gallery: [
+      ['assets/editorial/coffee-cherries.webp', 'Ripe coffee cherries on the branch'],
+      ['assets/coffee.webp', 'Robusta beans from the company profile'],
+      ['assets/media/coffee-beans-closeup-photo-2.webp', 'Green coffee beans from the supplied footage']
+    ],
+    benefits: [
+      ['leaf', 'Full-bodied character', 'A bold profile for espresso and other coffee blends.'],
+      ['check', 'Screen size selection', 'Size 16–18 is listed in the company profile.'],
+      ['box', 'Choice of processing', 'Discuss washed, natural or honey processing when ordering.']
+    ]
+  },
+  carbon: {
+    slug: 'activated-carbon',
+    title: 'Activated Carbon',
+    label: 'Activated Carbon',
+    summary: 'Porous adsorbent for water treatment, gas filtration and industrial uses.',
+    subtitle: 'A porous adsorbent for water treatment, air and gas filtration, and industrial applications.',
+    highlight: 'Granular, powder and pellet',
+    hero: 'coconut-plantation',
+    feature: ['carbon-and-shell', 'Black activated carbon granules beside coconut shells in a reference image'],
+    gallery: [
+      ['assets/media/carbon-granular.webp', 'Granular activated carbon'],
+      ['assets/media/carbon-powder.webp', 'Powdered activated carbon'],
+      ['assets/media/carbon-pellet.webp', 'Pelletized activated carbon']
+    ],
+    benefits: [
+      ['flask', 'Adsorption performance', 'Specify the target contaminants and operating conditions.'],
+      ['box', 'Three physical forms', 'Select the particle size and form for your process.'],
+      ['document', 'Sample analysis available', 'Review the listed results and request the relevant batch COA.']
+    ]
+  },
+  sulfur: {
+    slug: 'natural-sulfur',
+    title: 'Industrial Sulfur',
+    label: 'Sulfur',
+    summary: 'Industrial sulfur in lump, granular, powder and pastille forms.',
+    subtitle: 'Sulfur in several physical forms for agriculture, chemical processing and manufacturing.',
+    highlight: '99.92% total sulfur in the tested sample',
+    hero: 'sulfur-crater',
+    feature: ['card-sulfur', 'Yellow sulfur powder on a pale surface'],
+    gallery: [
+      ['assets/sulfur.webp', 'Yellow sulfur from the company profile'],
+      ['assets/media/sulfur-granules-photo-1.webp', 'Bulk yellow granules from the supplied footage'],
+      ['assets/editorial/sulfur-powder.webp', 'Yellow sulfur powder in a reference image']
+    ],
+    benefits: [
+      ['check', 'Tested sample', 'The profile records 99.92% total sulfur for one tested sample.'],
+      ['box', 'Several physical forms', 'Choose lump, granular, powder or pastille according to your process.'],
+      ['ship', 'Bulk packing options', 'Discuss polypropylene bags or 1 MT jumbo bags.']
+    ]
+  },
+  broom: {
+    slug: 'natural-palm-brooms',
+    title: 'Natural Palm Brooms',
+    label: 'Palm Broomstick',
+    summary: 'Hand-tied palm midrib brooms for home, garden and outdoor cleaning.',
+    subtitle: 'Traditional hand-tied brooms made from palm midribs for home and outdoor cleaning.',
+    highlight: 'Handcrafted from natural palm midribs',
+    hero: 'broom-palm',
+    gallery: [
+      ['assets/editorial/broom-fibers.webp', 'Close-up of dried palm midribs'],
+      ['assets/editorial/broom-bundles.webp', 'Palm broom bundles tied with twine'],
+      ['assets/media/palm-broom-bundles-photo-1.webp', 'Finished palm broom bundles from the supplied footage']
+    ],
+    benefits: [
+      ['leaf', 'Natural palm midribs', 'Palm leaf midribs are dried, sorted and hand-tied.'],
+      ['check', 'Practical for daily sweeping', 'Strong, flexible bristles for homes and gardens.'],
+      ['box', 'Several bundle formats', 'Natural bundles, handles and pressed export bales are available to discuss.']
+    ]
+  },
+  candlenut: {
+    slug: 'candlenut',
+    title: 'Premium Dried Candlenut',
+    label: 'Candlenut',
+    summary: 'Indonesian candlenut for traditional recipes and oil processing.',
+    subtitle: 'Whole candlenuts and shelled kernels for culinary and candlenut oil applications.',
+    highlight: 'Indonesian origin · Whole nuts and shelled kernels',
+    hero: 'candlenut-trees',
+    feature: ['candlenut-bowl', 'A wooden bowl of candlenut kernels beside nuts in their shells'],
+    gallery: [
+      ['assets/media/candlenut-whole.webp', 'Whole candlenuts'],
+      ['assets/media/candlenut-kernels.webp', 'Shelled candlenut kernels'],
+      ['assets/editorial/candlenut-oil.webp', 'Reference image of candlenut oil']
+    ],
+    benefits: [
+      ['leaf', 'Culinary ingredient', 'Used in spice pastes, sauces and traditional recipes.'],
+      ['flask', 'Oil processing', 'Discuss kernel form and moisture for the intended process.'],
+      ['box', 'Packing options', 'The profile lists 25 kg polypropylene bags and a vacuum option.']
+    ]
+  }
+};

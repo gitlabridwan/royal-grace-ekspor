@@ -1,118 +1,412 @@
 'use strict';
-const $=selector=>document.querySelector(selector),$$=selector=>[...document.querySelectorAll(selector)];
-const DATA=window.RGE_DATA,products=DATA.products,videos=DATA.videos;
-const icon=name=>`<svg class="icon" aria-hidden="true"><use href="#i-${name}"/></svg>`;
-const escapeHTML=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const category={agri:'Food & Agriculture',industrial:'Industrial',craft:'Natural Fibers'};
-let selected=new Set(),filter='all',mediaFilter='all',currentProduct=null,summaryText='',viewerModule=null,viewerPromise=null,toastTimer;
-const focusHistory=new WeakMap();
-try{const saved=JSON.parse(localStorage.getItem('rge-products')||'[]');if(Array.isArray(saved))selected=new Set(saved.filter(id=>products.some(p=>p.id===id)));localStorage.setItem('rge-language','en');}catch{}
-const productById=id=>products.find(p=>p.id===id);
-const videoById=id=>videos.find(v=>v.id===id);
-const persist=()=>{try{localStorage.setItem('rge-products',JSON.stringify([...selected]));}catch{}};
-function toast(message){$('#toast').textContent=message;$('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3500);}
-function pauseVideos(root=document){root.querySelectorAll('video').forEach(v=>{try{v.pause();}catch{}});}
-function openDialog(dialog){if(dialog.open)return;focusHistory.set(dialog,document.activeElement);dialog.showModal();document.body.style.overflow='hidden';}
-function renderHero(){
- $('#heroProducts').innerHTML=products.map(p=>`<button data-detail="${p.id}" class="hero-product"><img src="${p.cardImage}" alt="" width="76" height="58"><span>${p.name.en}</span>${icon('arrow-up')}</button>`).join('');
+
+const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+const site = window.RGE_DATA;
+const base = document.body.dataset.root || './';
+const { company, products, productPages } = site;
+const productById = id => products.find(product => product.id === id);
+const icon = key => `<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-${key}"/></svg>`;
+const selectionKey = 'rge-products';
+let selected = readSelection();
+let toastTimer;
+
+function localPageLink(href) {
+  if (location.protocol !== 'file:') return href;
+  const url = new URL(href, location.href);
+  if (url.protocol === 'file:' && url.pathname.endsWith('/')) url.pathname += 'index.html';
+  return url.href;
 }
-function renderProducts(){
- const query=$('#productSearch').value.trim().toLowerCase();
- const visible=products.filter(p=>(filter==='all'||p.category===filter)&&[p.name.en,p.description.en,p.tag.en,...p.applications].join(' ').toLowerCase().includes(query));
- $('#productGrid').innerHTML=visible.map(p=>`<article class="product-card"><div class="product-photo"><button class="photo-trigger" data-detail="${p.id}" aria-label="Explore ${p.name.en}"><img src="${p.cardImage}" alt="${p.photos[0][1]}" width="420" height="270" loading="lazy"></button><span class="product-category">${category[p.category]}</span><button class="product-add" data-toggle="${p.id}" aria-label="Select ${p.name.en} for RFQ"></button><button class="video-badge" data-detail="${p.id}" data-tab="media">${icon('play')}Photos & Videos</button></div><div class="product-card-body"><p class="product-origin">${p.origin.en}</p><h3>${p.name.en}</h3><p class="product-description">${p.description.en}</p><div class="application-tags">${p.applications.slice(0,2).map(x=>`<span>${x}</span>`).join('')}</div><dl class="product-facts">${p.facts.map(([key,value])=>`<div><dt>${key}</dt><dd>${value}</dd></div>`).join('')}</dl><div class="product-card-actions"><button class="btn small" data-detail="${p.id}">Explore Product ${icon('arrow')}</button><button class="text-link" data-view3d="${p.id}">${icon('cube')}View in 3D</button></div></div></article>`).join('');
- $('#noResults').hidden=visible.length>0;$('#productCount').textContent=`${visible.length} ${visible.length===1?'product':'products'} shown`;syncToggleButtons();
+
+function announce(message) {
+  const toast = $('#toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
 }
-function syncToggleButtons(){
- $$('[data-toggle]').forEach(button=>{const id=button.dataset.toggle,p=productById(id),active=selected.has(id);button.setAttribute('aria-pressed',String(active));button.classList.toggle('selected',active);if(button.classList.contains('product-add')){button.innerHTML=icon(active?'check':'plus');button.setAttribute('aria-label',`${active?'Remove':'Select'} ${p.name.en} ${active?'from':'for'} RFQ`);}else button.innerHTML=`${icon(active?'check':'plus')}<span>${active?'Remove from RFQ':'Select for RFQ'}</span>`;});
+
+function readSelection() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(selectionKey) || '[]');
+    return new Set(Array.isArray(stored) ? stored.filter(id => productById(id)) : []);
+  } catch {
+    return new Set();
+  }
 }
-function renderRFQProducts(){
- $('#rfqProducts').innerHTML=products.map(p=>`<label class="rfq-option"><input type="checkbox" name="product" value="${p.id}" ${selected.has(p.id)?'checked':''}><span>${p.name.en}</span></label>`).join('');
- $('#shortlistBar').hidden=!selected.size;$('#shortlistTitle').textContent=`${selected.size} ${selected.size===1?'commodity':'commodities'} selected`;document.body.classList.toggle('has-shortlist',selected.size>0);if(selected.size)$('#productError').hidden=true;
+
+function saveSelection() {
+  try {
+    localStorage.setItem(selectionKey, JSON.stringify([...selected]));
+  } catch {
+    // The current page still tracks selections if storage is unavailable.
+  }
+  syncSelection();
 }
-function toggleProduct(id,checked,quiet=false){
- if(!productById(id))return;const add=checked??!selected.has(id);add?selected.add(id):selected.delete(id);persist();syncToggleButtons();renderRFQProducts();viewerModule?.syncSelection();if(!quiet)toast(add?'Product added to your RFQ list.':'Product removed from your RFQ list.');
+
+function syncSelection() {
+  $$('#rfqProducts input').forEach(input => { input.checked = selected.has(input.value); });
+  $$('[data-save]').forEach(button => {
+    const saved = selected.has(button.dataset.save);
+    const label = productPages[button.dataset.save].label;
+    const action = saved ? `Remove ${label} from your quote list` : `Add ${label} to your quote list`;
+    button.setAttribute('aria-pressed', String(saved));
+    button.setAttribute('aria-label', action);
+    button.title = action;
+    button.innerHTML = icon(saved ? 'check' : 'plus');
+  });
+  $('#shortlistBar').hidden = selected.size === 0 || Boolean($('#inquiryForm'));
+  $('#shortlistTitle').textContent = `${selected.size} ${selected.size === 1 ? 'product' : 'products'} selected`;
+  if (selected.size && $('#productError')) $('#productError').hidden = true;
+  const continuation = $('#shortlistBar a');
+  if (selected.size) {
+    continuation.href = localPageLink(`${base}contact/?products=${[...selected].join(',')}#inquiry`);
+  }
 }
-function sourceLabel(video){return video.type==='photo-presentation'?'Photo-based presentation':'Supplied footage';}
-function videoElement(video){return `<video controls playsinline preload="none" poster="${video.poster}" aria-label="${video.title}"><source src="${video.src}" type="video/mp4"><track kind="descriptions" src="${video.track}" srclang="en" label="English visual notes"><p>Your browser cannot play this video. <a href="${video.src}">Open the video file</a>.</p></video>`;}
-function videoCard(video){
- const note=video.type==='photo-presentation'?'A presentation made from profile reference photos, not original product footage.':video.product==='production'?'The specific process and product are not established. Ask the team for context.':'Original supplied footage, optimized for web viewing. Confirm the actual order specification separately.';
- return `<figure class="media-card"><div class="media-player">${videoElement(video)}</div><figcaption><div class="media-meta"><span class="source-chip ${video.type==='photo-presentation'?'reference-chip':''}">${sourceLabel(video)}</span><span>${Math.floor(video.duration/60)}:${String(Math.round(video.duration%60)).padStart(2,'0')}</span></div><h3>${video.title}</h3><p>${note}</p>${productById(video.product)?`<button class="text-link" data-detail="${video.product}" data-tab="media">More photos & product details ${icon('arrow-up')}</button>`:''}</figcaption></figure>`;
+
+function initializeNavigation() {
+  const toggle = $('#menuToggle');
+  const nav = $('#siteNav');
+  const mobile = matchMedia('(max-width: 790px)');
+  function setMenu(open) {
+    nav.hidden = mobile.matches && !open;
+    toggle.hidden = !mobile.matches;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+  }
+  mobile.addEventListener('change', () => setMenu(false));
+  toggle.addEventListener('click', () => setMenu(nav.hidden));
+  nav.addEventListener('click', event => {
+    if (event.target.closest('a') && mobile.matches) setMenu(false);
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+      setMenu(false);
+      toggle.focus();
+    }
+  });
+  setMenu(false);
 }
-function renderVideoLibrary(){pauseVideos($('#videoGrid'));$('#videoGrid').innerHTML=videos.filter(v=>mediaFilter==='all'||v.product===mediaFilter).map(videoCard).join('');}
-function photoGallery(p,key){
- const [src,caption]=p.photos[0];
- return `<div class="photo-gallery" data-gallery="${key}"><figure class="gallery-main"><a href="${src}" target="_blank" rel="noopener" aria-label="Open full reference image"><img src="${src}" alt="${caption}" width="620" height="410"></a><figcaption data-gallery-caption>${caption}</figcaption></figure><div class="gallery-thumbnails" role="group" aria-label="${p.name.en} photo gallery">${p.photos.map(([path,label],i)=>`<button data-gallery-key="${key}" data-photo-index="${i}" class="${i===0?'active':''}" aria-pressed="${i===0}" aria-label="${label}"><img src="${path}" alt="" width="72" height="62"></button>`).join('')}</div><button class="text-link gallery-3d" data-view3d="${p.id}">${icon('cube')}Explore an illustrative 3D form ${icon('arrow-up')}</button></div>`;
+
+function initializeCatalog() {
+  const search = $('#productSearch');
+  if (!search) return;
+  const categories = $$('[data-filter]');
+  const cards = $$('#productGrid [data-product]');
+  let filter = 'all';
+  const catalogEntries = cards.map(card => {
+    const save = document.createElement('button');
+    save.type = 'button';
+    save.className = 'icon-button catalog-save';
+    save.dataset.save = card.dataset.product;
+    save.addEventListener('click', () => {
+      const id = card.dataset.product;
+      const active = selected.has(id);
+      if (active) selected.delete(id);
+      else selected.add(id);
+      saveSelection();
+      announce(active ? 'Product removed from your quote list.' : 'Product added to your quote list.');
+    });
+    card.append(save);
+    return { card, product: productById(card.dataset.product) };
+  });
+  function updateResults() {
+    const query = search.value.trim().toLowerCase();
+    let count = 0;
+    for (const { card, product } of catalogEntries) {
+      const view = productPages[product.id];
+      const searchable = [product.name.en, product.description.en, product.tag.en, product.origin.en,
+        view.label, view.title, view.summary, ...product.applications].join(' ').toLowerCase();
+      const visible = (filter === 'all' || product.category === filter) && searchable.includes(query);
+      card.hidden = !visible;
+      if (visible) count += 1;
+    }
+    $('#noResults').hidden = count > 0;
+    $('#productCount').textContent = count === products.length ? `Showing all ${count} products` : `Showing ${count} of ${products.length} products`;
+  }
+  function setCategory(value) {
+    filter = value;
+    categories.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === value)));
+    updateResults();
+  }
+  categories.forEach(button => button.addEventListener('click', () => setCategory(button.dataset.filter)));
+  search.addEventListener('input', updateResults);
+  $('#resetSearch').addEventListener('click', () => {
+    search.value = '';
+    setCategory('all');
+    search.focus();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key !== '/' || event.altKey || event.ctrlKey || event.metaKey || $('dialog[open]')) return;
+    if (event.target.closest?.('input, textarea, select, [contenteditable]')) return;
+    event.preventDefault();
+    search.focus();
+  });
+  $('#catalogControls').hidden = false;
 }
-function renderDetail(id,tab='overview'){
- const p=productById(id);if(!p)return;currentProduct=id;pauseVideos($('#detailDialog'));
- $('#detailContent').innerHTML=`<header class="detail-heading"><p class="eyebrow">${category[p.category]} / INDONESIAN ORIGIN</p><h2 id="detailTitle">${p.name.en}</h2><p>${p.description.en}</p></header><div class="detail-tabs" role="tablist" aria-label="Product information"><button role="tab" id="detail-tab-overview" data-detail-tab="overview" aria-controls="detail-panel-overview">Overview</button><button role="tab" id="detail-tab-specs" data-detail-tab="specs" aria-controls="detail-panel-specs">Specifications & Packing</button><button role="tab" id="detail-tab-media" data-detail-tab="media" aria-controls="detail-panel-media">Photos & Videos <span>${p.photos.length} / ${p.videoIds.length}</span></button></div><section id="detail-panel-overview" class="detail-panel" role="tabpanel" aria-labelledby="detail-tab-overview"><div class="detail-overview-grid">${photoGallery(p,'overview')}<div class="detail-story"><h3>About this commodity</h3>${p.story.map(text=>`<p>${text}</p>`).join('')}<div class="detail-applications"><h4>Applications to discuss</h4><ul>${p.applications.map(x=>`<li>${x}</li>`).join('')}</ul></div><button class="btn detail-rfq" data-toggle="${p.id}"></button></div></div><div class="detail-bottom-grid"><article><h3>From requirement to selection</h3><ol>${p.steps.map(x=>`<li>${x}</li>`).join('')}</ol></article><article><h3>Prepare a useful inquiry</h3><ul>${p.questions.map(x=>`<li>${x}</li>`).join('')}</ul><a href="#inquiry" class="text-link detail-inquiry">Build an RFQ for this product ${icon('arrow-up')}</a></article></div></section><section id="detail-panel-specs" class="detail-panel" role="tabpanel" aria-labelledby="detail-tab-specs"><div class="detail-specs-grid"><div><h3>Profile specification points</h3><table class="spec-table"><caption>Company-profile information; confirm the actual batch specification.</caption><tbody>${p.specs.en.map(([key,value])=>`<tr><th scope="row">${key}</th><td>${value}</td></tr>`).join('')}</tbody></table><p class="spec-note">${p.note.en}</p></div><aside class="packing-card">${icon('box')}<h3>Packaging & preparation</h3><p>${p.packing}</p><h4>Before an order is finalized</h4><p>Confirm the physical form, specification, quantity, documents, packing, destination and commercial terms in the quotation.</p><button class="btn detail-rfq" data-toggle="${p.id}"></button></aside></div></section><section id="detail-panel-media" class="detail-panel" role="tabpanel" aria-labelledby="detail-tab-media"><div class="detail-media-intro"><h3>Photographs & product videos</h3><p>Explore the supplied material and profile references. Media is not proof of the grade or specification of a future shipment.</p></div>${photoGallery(p,'media')}<div class="detail-video-grid">${p.videoIds.map(videoById).map(videoCard).join('')}</div></section>`;
- setDetailTab(tab);syncToggleButtons();
+
+const focusBeforeOpen = new WeakMap();
+
+function openDialog(dialog) {
+  if (dialog.open) return;
+  focusBeforeOpen.set(dialog, document.activeElement);
+  dialog.showModal();
+  dialog.scrollTop = 0;
 }
-function setDetailTab(tab){
- const key=['overview','specs','media'].includes(tab)?tab:'overview';
- $$('#detailDialog [data-detail-tab]').forEach(b=>{const active=b.dataset.detailTab===key;b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});
- $$('#detailDialog .detail-panel').forEach(panel=>{const active=panel.id===`detail-panel-${key}`;panel.hidden=!active;if(!active)pauseVideos(panel);});
+
+function initializeDialogs() {
+  $$('dialog').forEach(dialog => {
+    $('[data-close]', dialog).addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', event => {
+      if (event.target !== dialog) return;
+      const bounds = dialog.getBoundingClientRect();
+      if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) {
+        dialog.close();
+      }
+    });
+    dialog.addEventListener('close', () => {
+      const previous = focusBeforeOpen.get(dialog);
+      if (previous?.isConnected) previous.focus({ preventScroll: true });
+    });
+  });
 }
-function showProduct(id,tab='overview'){renderDetail(id,tab);openDialog($('#detailDialog'));$('#detailDialog').scrollTop=0;}
-async function openProduct3D(id){
- if(!productById(id))return;pauseVideos();toast('Preparing the 3D viewer…');
- try{if(!viewerPromise)viewerPromise=import('./product-viewer.js').catch(error=>{viewerPromise=null;throw error;});viewerModule=await viewerPromise;viewerModule.openViewer({id,language:'en',bridge:{getProduct:productById,getProducts:()=>products,isSelected:key=>selected.has(key),toggle:key=>toggleProduct(key),showSpecs:key=>showProduct(key,'specs')}});$('#toast').classList.remove('show');}catch{showProduct(id);toast('3D could not load. Open via GitHub Pages or a local server; photos and specifications remain available.');}
+
+function initializeGallery() {
+  const dialog = $('#galleryDialog');
+  if (!dialog) return;
+  let links = [];
+  let position = 0;
+  function showImage(index) {
+    position = (index + links.length) % links.length;
+    const link = links[position];
+    const img = $('#galleryPhoto');
+    img.src = link.href;
+    img.alt = $('img', link).alt;
+    $('#galleryCaption').textContent = img.alt;
+    $('#galleryPosition').textContent = `${position + 1} / ${links.length}`;
+  }
+  $$('[data-image]').forEach(link => {
+    link.addEventListener('click', event => {
+      if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      links = $$('[data-image]', link.closest('[data-gallery]'));
+      showImage(links.indexOf(link));
+      openDialog(dialog);
+    });
+  });
+  $('#galleryPrev').addEventListener('click', () => showImage(position - 1));
+  $('#galleryNext').addEventListener('click', () => showImage(position + 1));
+  dialog.addEventListener('keydown', event => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      showImage(position + (event.key === 'ArrowLeft' ? -1 : 1));
+    }
+  });
 }
-const faqs=[
- ['MOQ & pricing','What are the prices and minimum order quantities?','MOQ and prices are confirmed by quotation. Product form, grade, quantity, packing, destination and shipping terms all affect the discussion. Include these details in your RFQ so the team can respond to the actual requirement.'],
- ['Samples','Can I request a sample before ordering?','Sample provision and product testing are listed among the company’s services. Availability, sample quantity, fees, shipping costs and evaluation criteria should be agreed before dispatch.'],
- ['Quality','Do profile specifications apply to every shipment?','Specifications require confirmation for the actual batch. Activated-carbon and sulfur results in the profile refer to tested samples. Request the relevant batch COA and agree acceptance criteria before finalizing an order.'],
- ['Documentation','Which export documents can be discussed?','The company profile lists COA, COO, phytosanitary, fumigation, MSDS, invoice, packing list, Bill of Lading and ISPM 15 where applicable. This is a potential document list, not evidence that every certificate is held. Confirm valid original documents for your commodity and destination.'],
- ['Packaging','Can packaging or private labeling be customized?','Custom packaging and private label are included in the profile’s services. Discuss the material, pack size, label design, language, and any minimum production quantities for the chosen commodity.'],
- ['Media','Are the photos, videos and 3D models actual shipment records?','The site labels supplied footage, profile reference photographs, and photo-based presentations. Carbon and candlenut videos are reference-photo presentations. The 3D models are procedural illustrations, not product scans. None of these media establishes the quality or appearance of a future shipment.'],
- ['Shipping','How are delivery times and shipping terms confirmed?','Share your destination, indicative quantity, packing preference and required date. Availability, preparation time, loading arrangements and shipping terms must be confirmed in the transaction; the website does not promise a fixed lead time.'],
- ['Contact','How do I send a quotation request?','Build and review the RFQ summary, then choose Email RFQ or Open WhatsApp. These actions prepare a message in your chosen application; you decide whether to send it. You can also contact info@royalgraceexportindo.com or WhatsApp +62 857 180 66 919 directly.']
+
+function initializeVideo() {
+  const media = $('#mediaFilters');
+  if (media) {
+    const buttons = $$('[data-media-filter]', media);
+    const cards = $$('[data-video-product]');
+    media.hidden = false;
+    buttons.forEach(button => button.addEventListener('click', () => {
+      buttons.forEach(candidate => candidate.setAttribute('aria-pressed', String(candidate === button)));
+      cards.forEach(card => {
+        const filter = button.dataset.mediaFilter;
+        card.hidden = filter !== 'all' && card.dataset.videoProduct !== filter;
+        if (card.hidden) $('video', card).pause();
+      });
+    }));
+  }
+  const detail = $('details#media');
+  if (detail) {
+    const openIfLinked = () => { if (location.hash === '#media') detail.open = true; };
+    openIfLinked();
+    window.addEventListener('hashchange', openIfLinked);
+    detail.addEventListener('toggle', () => {
+      if (!detail.open) $$('video', detail).forEach(video => video.pause());
+    });
+  }
+  document.addEventListener('play', event => {
+    if (event.target.tagName !== 'VIDEO') return;
+    $$('video').forEach(video => { if (video !== event.target) video.pause(); });
+  }, true);
+}
+
+const faqs = [
+  ['MOQ & pricing', 'What are the minimum order quantities and prices?', 'The company confirms both by quotation. Include your product form, grade, quantity, packing, destination and shipping terms.'],
+  ['Samples', 'Can I request a sample before ordering?', 'Yes. Discuss availability, quantity, fees, shipping costs and the tests you plan to run before the sample is dispatched.'],
+  ['Quality', 'Do the profile specifications apply to every shipment?', 'Confirm specifications and acceptance criteria for the actual batch. Activated carbon and sulfur laboratory results shown on the site apply to the samples identified in the company profile.'],
+  ['Documentation', 'Which export documents are available?', 'Discuss the COA, COO, phytosanitary or fumigation records, safety documentation, invoice, packing list and Bill of Lading with our team. Requirements depend on the commodity and destination.'],
+  ['Packaging', 'Can I request custom packing or labels?', 'Yes. Discuss material, pack size, label language and minimum quantities for the chosen product.'],
+  ['Media', 'Where do the product images and videos come from?', 'The site includes editorial reference images, company-profile photographs and supplied videos. Carbon and candlenut photo presentations use company-profile images.'],
+  ['Shipping', 'How are shipping terms and lead times confirmed?', 'Share your destination, estimated quantity, packing preferences and required date. The company confirms availability, preparation time and shipping terms with each order.'],
+  ['Contact', 'How do I send a quote request?', `Use the quote form to create a summary, then send it by email or WhatsApp. You can also contact ${company.email} directly.`]
 ];
-function renderSupport(){
- $('#servicesGrid').innerHTML=DATA.services.map((s,i)=>`<article class="service"><span class="service-number">0${i+1}</span>${icon(s.icon)}<h3>${s.title}</h3><p>${s.text}</p></article>`).join('');
- $('#faqList').innerHTML=faqs.map(([,question,answer])=>`<details><summary>${question}</summary><p>${answer}</p></details>`).join('');
- $('#helpQuestions').innerHTML=faqs.map(([topic],i)=>`<button data-help="${i}">${topic}</button>`).join('');
- $('#insightsGrid').innerHTML=DATA.articles.map(a=>`<article class="insight"><img src="assets/${a.image}.webp" alt="${a.category}" width="420" height="210" loading="lazy"><div><span class="insight-meta">${a.category} · ${a.time} MIN READ</span><h3>${a.title}</h3><button class="text-link" data-article="${a.id}">Read the guide ${icon('arrow-up')}</button></div></article>`).join('');
+
+const policies = {
+  privacy: {
+    title: 'Privacy Policy',
+    body: `<p>The quote form prepares a summary on your device. When you choose email or WhatsApp, that application receives the draft text and you choose when to send it.</p>
+      <h3>Device storage</h3><p>The site saves your selected products in your browser. Use Clear to remove the list or clear site data in browser settings. The form keeps your name, email and other details in the current page.</p>
+      <h3>Media and hosting</h3><p>Photographs and videos load from the same site. The hosting provider may process technical access logs under its own policies.</p>
+      <h3>Contact</h3><p><a href="mailto:${company.email}">${company.email}</a></p>`
+  },
+  terms: {
+    title: 'Terms of Use',
+    body: `<h3>Product information</h3><p>Confirm product specifications, grades, availability, documentation, price and delivery terms for each transaction. Sample results apply to the samples identified in the company profile.</p>
+      <h3>Visual references</h3><p>Photographs, supplied footage and editorial images illustrate products and settings. Confirm the shipment’s grade and characteristics with the team.</p>
+      <h3>Quotation requests</h3><p>The form produces a draft request. Commercial terms take effect after direct agreement with the company.</p>`
+  }
+};
+
+function initializeSupport() {
+  const faq = $('#faqList');
+  if (faq) faq.innerHTML = faqs.map(([, question, answer]) => `<details><summary>${question}</summary><p>${answer}</p></details>`).join('');
+  const panel = $('#helpPanel');
+  if (panel) {
+    const launcher = $('#helpLauncher');
+    const close = $('#closeHelp');
+    const questions = $('#helpQuestions');
+    questions.innerHTML = faqs.map(([topic], index) => `<button type="button" data-help="${index}">${topic}</button>`).join('');
+    const setOpen = open => {
+      panel.hidden = !open;
+      launcher.setAttribute('aria-expanded', String(open));
+      (open ? close : launcher).focus();
+    };
+    launcher.addEventListener('click', () => setOpen(panel.hidden));
+    close.addEventListener('click', () => setOpen(false));
+    panel.addEventListener('keydown', event => { if (event.key === 'Escape') setOpen(false); });
+    questions.addEventListener('click', event => {
+      const choice = event.target.closest('[data-help]');
+      if (!choice) return;
+      const output = $('#helpAnswer');
+      output.textContent = faqs[Number(choice.dataset.help)][2];
+      output.hidden = false;
+    });
+  }
+  const articleDialog = $('#articleDialog');
+  function showArticle(title, text) {
+    const content = $('#articleContent');
+    content.innerHTML = `<h2 id="articleTitle"></h2>${text}`;
+    $('#articleTitle', content).textContent = title;
+    openDialog(articleDialog);
+  }
+  $$('[data-policy]').forEach(button => button.addEventListener('click', () => {
+    const policy = policies[button.dataset.policy];
+    showArticle(policy.title, policy.body);
+  }));
+  $$('[data-article]').forEach(button => button.addEventListener('click', () => {
+    const article = site.articles.find(item => item.id === button.dataset.article);
+    showArticle(article.title, `${article.body}<p><a href="${localPageLink(`${base}contact/#inquiry`)}" class="text-link">Prepare your inquiry ${icon('arrow')}</a></p>`);
+  }));
 }
-function renderArticle(id){const article=DATA.articles.find(a=>a.id===id);if(!article)return;$('#articleContent').innerHTML=`<p class="eyebrow">${article.category} · ${article.time} MIN READ</p><h2 id="articleTitle">${article.title}</h2>${article.body}<p class="source-note">Based on the Royal Grace Exportindo company profile. Confirm current product and commercial details with the team.</p><a href="#inquiry" class="text-link article-inquiry">Prepare your inquiry ${icon('arrow-up')}</a>`;openDialog($('#articleDialog'));}
-const policies={privacy:{title:'Privacy Policy',body:'<p>This website introduces the products and services of PT Royal Grace Exportindo.</p><h3>Your inquiry</h3><p>RFQ form details are used in your browser to prepare a summary. The website does not automatically send those details to the company or a database. If you choose Email RFQ or Open WhatsApp, the prepared text is passed to the application you choose, and you control whether it is sent.</p><h3>Device storage</h3><p>Your selected product list is saved using localStorage. Clear the selection with the Clear button, or remove site data in your browser settings. Personal form fields are not permanently saved by this website.</p><h3>Media and external services</h3><p>Videos and the Three.js viewer are hosted with the site. Videos load on demand and retain their original supplied audio where present. Fonts may load from Google Fonts. No Google Analytics, advertising pixels, or third-party live chat service has been installed. Hosting providers may process technical access logs under their own policies.</p><h3>Contact</h3><p>For company inquiries, email info@royalgraceexportindo.com or contact WhatsApp +62 857 180 66 919.</p>'},terms:{title:'Terms of Use',body:'<p>The website provides an introduction to the products and services of PT Royal Grace Exportindo.</p><h3>Product information</h3><p>Specifications, forms, prices, MOQ, certificates, packing, availability and shipment schedules require confirmation for each transaction. Sample test results do not guarantee all batches.</p><h3>Photos, videos and 3D</h3><p>Media is labeled by source type. Photo-based presentations are not original product footage, and 3D models are illustrations rather than scans or measurement tools. Media does not establish a shipment grade, purity, certification, or future appearance.</p><h3>Quotation requests</h3><p>An RFQ summary is not an order, contract, or binding quotation. It is not automatically sent. Commercial terms take effect only after direct agreement.</p><h3>Documents</h3><p>A document list does not establish that every certificate is held. Request relevant, valid original documents for the product and destination.</p>'}};
-function showPolicy(id){const policy=policies[id];if(!policy)return;$('#articleContent').innerHTML=`<p class="eyebrow">ROYAL GRACE EXPORTINDO</p><h2 id="articleTitle">${policy.title}</h2>${policy.body}`;openDialog($('#articleDialog'));}
-function buildSummary(){
- const form=new FormData($('#inquiryForm')),value=key=>String(form.get(key)||'').trim();
- return ['REQUEST FOR QUOTATION','PT ROYAL GRACE EXPORTINDO','────────────────────────────',`Date: ${new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}`,'',`Name: ${value('name')}`,`Company: ${value('company')}`,`Email: ${value('email')}`,'',`Commodities: ${products.filter(p=>selected.has(p.id)).map(p=>p.name.en).join(', ')}`,`Indicative total quantity: ${value('quantity')} ${value('unit')}`,`Destination country: ${value('country')}`,`Destination port / city: ${value('destination')||'—'}`,`Shipping preference: ${value('incoterm')}`,'','Requirement notes:',value('notes')||'—','','────────────────────────────','Draft request. Not automatically sent.','Specifications, prices, MOQ, documents and shipment require confirmation. This document is not an order or a binding quotation.'].join('\n');
+
+function buildSummary(form) {
+  const fields = new FormData(form);
+  const value = key => String(fields.get(key) || '').trim();
+  return [
+    'REQUEST FOR QUOTATION', company.name,
+    `Date: ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`,
+    '', `Name: ${value('name')}`, `Company: ${value('company')}`, `Email: ${value('email')}`,
+    '', `Commodities: ${products.filter(product => selected.has(product.id)).map(product => product.name.en).join(', ')}`,
+    `Indicative total quantity: ${value('quantity')} ${value('unit')}`,
+    `Destination country: ${value('country')}`, `Destination port or city: ${value('destination') || '—'}`,
+    `Shipping preference: ${value('incoterm')}`, '', 'Requirement notes:', value('notes') || '—',
+    '', 'Draft inquiry. Please confirm specifications, price, minimum order, documents and shipping terms.'
+  ].join('\n');
 }
-function setHelp(open){$('#helpPanel').hidden=!open;$('#helpLauncher').setAttribute('aria-expanded',String(open));if(open)$('#closeHelp').focus();else $('#helpLauncher').focus();}
-$('#menuToggle').addEventListener('click',()=>{const open=$('#mobileNav').hidden;$('#mobileNav').hidden=!open;$('#menuToggle').setAttribute('aria-expanded',String(open));});
-$$('#mobileNav a').forEach(a=>a.addEventListener('click',()=>{$('#mobileNav').hidden=true;$('#menuToggle').setAttribute('aria-expanded','false');}));
-$$('.desktop-nav a').forEach(a=>a.addEventListener('click',()=>$$('.desktop-nav a').forEach(link=>link.classList.toggle('active',link===a))));
-$$('[data-filter]').forEach(button=>button.addEventListener('click',()=>{filter=button.dataset.filter;$$('[data-filter]').forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});renderProducts();}));
-$('#productSearch').addEventListener('input',renderProducts);
-$('#resetSearch').addEventListener('click',()=>{$('#productSearch').value='';filter='all';$$('[data-filter]').forEach(b=>{b.classList.toggle('active',b.dataset.filter==='all');b.setAttribute('aria-pressed',String(b.dataset.filter==='all'));});renderProducts();$('#productSearch').focus();});
-$$('[data-media-filter]').forEach(button=>button.addEventListener('click',()=>{mediaFilter=button.dataset.mediaFilter;$$('[data-media-filter]').forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});renderVideoLibrary();}));
-$('#rfqProducts').addEventListener('change',event=>{if(event.target.matches('input')){const id=event.target.value;toggleProduct(id,event.target.checked,true);$(`#rfqProducts input[value="${id}"]`)?.focus({preventScroll:true});}});
-$('#clearShortlist').addEventListener('click',()=>{selected.clear();persist();syncToggleButtons();renderRFQProducts();viewerModule?.syncSelection();toast('Product selection cleared.');});
-$('#helpLauncher').addEventListener('click',()=>setHelp($('#helpPanel').hidden));$('#closeHelp').addEventListener('click',()=>setHelp(false));$('#helpContact').addEventListener('click',()=>setHelp(false));
-$$('dialog').forEach(dialog=>{dialog.addEventListener('close',()=>{pauseVideos(dialog);document.body.style.overflow=$$('dialog').some(d=>d.open)?'hidden':'';const previous=focusHistory.get(dialog);if(previous?.isConnected)previous.focus({preventScroll:true});});dialog.addEventListener('click',event=>{if(event.target===dialog&&dialog.id!=='product3dDialog'){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});});
-document.addEventListener('play',event=>{if(event.target.tagName==='VIDEO')$$('video').forEach(video=>{if(video!==event.target){try{video.pause();}catch{}}});},true);
-document.addEventListener('click',event=>{
- const three=event.target.closest('[data-view3d]');if(three){openProduct3D(three.dataset.view3d);return;}
- const detail=event.target.closest('[data-detail]');if(detail){showProduct(detail.dataset.detail,detail.dataset.tab||'overview');return;}
- const toggle=event.target.closest('[data-toggle]');if(toggle){toggleProduct(toggle.dataset.toggle);return;}
- const tab=event.target.closest('[data-detail-tab]');if(tab){setDetailTab(tab.dataset.detailTab);return;}
- const photo=event.target.closest('[data-photo-index]');if(photo){const p=productById(currentProduct),gallery=photo.closest('[data-gallery]'),index=Number(photo.dataset.photoIndex),[src,caption]=p.photos[index];gallery.querySelector('.gallery-main img').src=src;gallery.querySelector('.gallery-main img').alt=caption;gallery.querySelector('.gallery-main a').href=src;gallery.querySelector('[data-gallery-caption]').textContent=caption;gallery.querySelectorAll('[data-photo-index]').forEach(b=>{b.classList.toggle('active',b===photo);b.setAttribute('aria-pressed',String(b===photo));});return;}
- const article=event.target.closest('[data-article]');if(article){renderArticle(article.dataset.article);return;}
- const policy=event.target.closest('[data-policy]');if(policy){showPolicy(policy.dataset.policy);return;}
- if(event.target.closest('[data-close]')){event.target.closest('dialog').close();return;}
- const help=event.target.closest('[data-help]');if(help){$('#helpAnswer').textContent=faqs[Number(help.dataset.help)][2];$('#helpAnswer').hidden=false;return;}
- if(event.target.closest('.detail-inquiry')){if(currentProduct&&!selected.has(currentProduct))toggleProduct(currentProduct,true,true);$('#detailDialog').close();}
- if(event.target.closest('.article-inquiry'))$('#articleDialog').close();
+
+function initializeInquiry() {
+  const form = $('#inquiryForm');
+  if (!form) return;
+  const query = new URLSearchParams(location.search);
+  const incoming = [query.get('product'), ...(query.get('products') || '').split(',')].filter(id => productById(id));
+  if (incoming.length) {
+    incoming.forEach(id => selected.add(id));
+    saveSelection();
+  }
+  $('#rfqProducts').addEventListener('change', event => {
+    const { checked, value } = event.target;
+    if (checked) selected.add(value);
+    else selected.delete(value);
+    saveSelection();
+  });
+
+  const dialog = $('#summaryDialog');
+  const copy = $('#copyRFQ');
+  let summary = '';
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    if (!selected.size) {
+      $('#productError').hidden = false;
+      $('#rfqProducts input').focus();
+      return;
+    }
+    summary = buildSummary(form);
+    $('#rfqSummary').textContent = summary;
+    copy.innerHTML = `${icon('document')}Copy`;
+    const subject = encodeURIComponent('Sourcing inquiry — Royal Grace Exportindo');
+    const body = encodeURIComponent(summary);
+    $('#emailRFQ').href = `mailto:${company.email}?subject=${subject}&body=${body}`;
+    $('#whatsappRFQ').href = `https://wa.me/${company.whatsapp}?text=${body}`;
+    openDialog(dialog);
+  });
+  $('#downloadRFQ').addEventListener('click', () => {
+    const url = URL.createObjectURL(new Blob([`\ufeff${summary}`], { type: 'text/plain;charset=utf-8' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `Royal-Grace-RFQ-${new Date().toISOString().slice(0, 10)}.txt`;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+  copy.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(summary);
+      copy.innerHTML = `${icon('check')}Copied`;
+    } catch {
+      copy.innerHTML = `${icon('document')}Copy unavailable`;
+    }
+  });
+}
+
+function redirectLegacySection() {
+  if (document.body.dataset.path !== '') return;
+  const routes = {
+    '#about': 'about/#our-story', '#products': 'products/', '#quality': 'export/#quality', '#solutions': 'export/#solutions',
+    '#media': 'export/#media', '#insights': 'export/#insights', '#faq': 'export/#faq',
+    '#contact': 'contact/#contact', '#inquiry': 'contact/#inquiry'
+  };
+  if (Object.hasOwn(routes, location.hash)) location.replace(localPageLink(base + routes[location.hash]));
+}
+
+if (location.protocol === 'file:') {
+  for (const link of $$('a[href^="./"], a[href^="../"]')) {
+    link.href = localPageLink(link.getAttribute('href'));
+  }
+}
+initializeNavigation();
+initializeCatalog();
+initializeDialogs();
+initializeGallery();
+initializeVideo();
+initializeSupport();
+initializeInquiry();
+syncSelection();
+$('#year').textContent = String(new Date().getFullYear());
+$('#clearShortlist').addEventListener('click', () => {
+  const lastFocused = $('[data-save][aria-pressed="true"]:not([hidden])');
+  selected.clear();
+  saveSelection();
+  (lastFocused || $('.header-quote')).focus({ preventScroll: true });
+  announce('Product selection cleared.');
 });
-document.addEventListener('keydown',event=>{
- if(event.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)&&!$$('dialog').some(d=>d.open)){event.preventDefault();$('#productSearch').focus();$('#products').scrollIntoView();}
- if(event.key==='Escape'){$('#mobileNav').hidden=true;$('#menuToggle').setAttribute('aria-expanded','false');if(!$('#helpPanel').hidden)setHelp(false);}
- if(event.target.matches?.('[data-detail-tab]')&&['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();const tabs=$$('#detailDialog [data-detail-tab]'),index=tabs.indexOf(event.target);const next=event.key==='Home'?0:event.key==='End'?tabs.length-1:(index+(event.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;setDetailTab(tabs[next].dataset.detailTab);tabs[next].focus();}
+window.addEventListener('storage', event => {
+  if (event.key === selectionKey || event.key === null) {
+    selected = readSelection();
+    syncSelection();
+  }
 });
-$('#inquiryForm').addEventListener('submit',event=>{event.preventDefault();if(!selected.size){$('#productError').hidden=false;$('#rfqProducts input').focus();return;}summaryText=buildSummary();$('#rfqSummary').textContent=summaryText;$('#emailRFQ').href=`mailto:${DATA.company.email}?subject=${encodeURIComponent('Sourcing inquiry — Royal Grace Exportindo')}&body=${encodeURIComponent(summaryText)}`;$('#whatsappRFQ').href=`https://wa.me/${DATA.company.whatsapp}?text=${encodeURIComponent(summaryText)}`;openDialog($('#summaryDialog'));});
-$('#downloadRFQ').addEventListener('click',()=>{const url=URL.createObjectURL(new Blob(['\ufeff'+summaryText],{type:'text/plain;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download=`Royal-Grace-RFQ-${new Date().toISOString().slice(0,10)}.txt`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('RFQ summary downloaded.');});
-$('#copyRFQ').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(summaryText);$('#copyRFQ').innerHTML=icon('check')+'Copied';setTimeout(()=>{$('#copyRFQ').innerHTML=icon('document')+'Copy';},2200);toast('RFQ summary copied.');}catch{toast('Copy is unavailable. Please download the summary.');}});
-renderHero();renderProducts();renderRFQProducts();renderSupport();renderVideoLibrary();$('#year').textContent=new Date().getFullYear();
+redirectLegacySection();
+window.addEventListener('hashchange', redirectLegacySection);
