@@ -1,8 +1,7 @@
 'use strict';
 
-// OPSIONAL: setelah GitHub Pages aktif, isi alamat website lengkap di sini.
-// Contoh: siteUrl: 'https://USERNAME.github.io/royal-grace-exportindo/'
-// Jika dikosongkan, alamat akan mengikuti lokasi website yang sedang dibuka.
+// Optional: enter the final GitHub Pages or custom-domain URL below.
+// Leave blank to use the current hosting location.
 window.RGE_SITE_CONFIG = Object.freeze({
   siteUrl: ''
 });
@@ -44,7 +43,7 @@ window.RGE_SITE_CONFIG = Object.freeze({
     meta.content = content;
   };
   setOpenGraph('og:url', base.href);
-  setOpenGraph('og:image', new URL('assets/collection.webp', base).href);
+  setOpenGraph('og:image', new URL('assets/hero-bright.webp', base).href);
 
   const structured = document.querySelector('script[type="application/ld+json"]');
   if (structured) {

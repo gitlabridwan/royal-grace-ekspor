@@ -1,0 +1,118 @@
+{
+  "media": [
+    {
+      "id": "coffee-beans-closeup",
+      "product": "coffee",
+      "title": "Green coffee beans \u2014 close-up",
+      "src": "assets/media/coffee-beans-closeup.mp4",
+      "poster": "assets/media/coffee-beans-closeup-poster.webp",
+      "track": "assets/media/coffee-beans-closeup.vtt",
+      "duration": 10.77,
+      "type": "supplied",
+      "size_mib": 0.66,
+      "original": "WhatsApp Video 2026-11-08 at 13.13.28 (2).mp4"
+    },
+    {
+      "id": "coffee-beans-handling",
+      "product": "coffee",
+      "title": "Green coffee beans \u2014 handling",
+      "src": "assets/media/coffee-beans-handling.mp4",
+      "poster": "assets/media/coffee-beans-handling-poster.webp",
+      "track": "assets/media/coffee-beans-handling.vtt",
+      "duration": 25.7,
+      "type": "supplied",
+      "size_mib": 1.98,
+      "original": "WhatsApp Video 2026-11-08 at 13.13.28 (3).mp4"
+    },
+    {
+      "id": "production-equipment",
+      "product": "production",
+      "title": "Production equipment \u2014 supplied footage",
+      "src": "assets/media/production-equipment.mp4",
+      "poster": "assets/media/production-equipment-poster.webp",
+      "track": "assets/media/production-equipment.vtt",
+      "duration": 23.3,
+      "type": "supplied",
+      "size_mib": 1.19,
+      "original": "WhatsApp Video 2026-11-08 at 13.20.38.mp4"
+    },
+    {
+      "id": "sulfur-granules",
+      "product": "sulfur",
+      "title": "Sulfur granules \u2014 bulk material",
+      "src": "assets/media/sulfur-granules.mp4",
+      "poster": "assets/media/sulfur-granules-poster.webp",
+      "track": "assets/media/sulfur-granules.vtt",
+      "duration": 17.35,
+      "type": "supplied",
+      "size_mib": 2.71,
+      "original": "WhatsApp Video 2026-11-08 at 13.24.01 (1).mp4"
+    },
+    {
+      "id": "palm-broom-bundles",
+      "product": "broom",
+      "title": "Natural palm broom bundles",
+      "src": "assets/media/palm-broom-bundles.mp4",
+      "poster": "assets/media/palm-broom-bundles-poster.webp",
+      "track": "assets/media/palm-broom-bundles.vtt",
+      "duration": 16.26,
+      "type": "supplied",
+      "size_mib": 1.92,
+      "original": "WhatsApp Video 2026-11-08 at 13.26.54 (1).mp4"
+    },
+    {
+      "id": "vanilla-pods-curing",
+      "product": "vanilla",
+      "title": "Vanilla pods \u2014 handling and drying",
+      "src": "assets/media/vanilla-pods-curing.mp4",
+      "poster": "assets/media/vanilla-pods-curing-poster.webp",
+      "track": "assets/media/vanilla-pods-curing.vtt",
+      "duration": 30.5,
+      "type": "supplied",
+      "size_mib": 4.34,
+      "original": "WhatsApp Video 2026-11-10 at 00.28.12.mp4"
+    },
+    {
+      "id": "vanilla-origin-story",
+      "product": "vanilla",
+      "title": "Vanilla \u2014 cultivation and preparation",
+      "src": "assets/media/vanilla-origin-story.mp4",
+      "poster": "assets/media/vanilla-origin-story-poster.webp",
+      "track": "assets/media/vanilla-origin-story.vtt",
+      "duration": 113.54,
+      "type": "supplied",
+      "size_mib": 10.9,
+      "original": "WhatsApp Video 2026-11-10 at 13.47.59.mp4"
+    },
+    {
+      "id": "carbon-photo-presentation",
+      "product": "carbon",
+      "title": "Activated Carbon \u2014 photo presentation",
+      "src": "assets/media/carbon-photo-presentation.mp4",
+      "poster": "assets/media/carbon-photo-presentation-poster.webp",
+      "track": "assets/media/carbon-photo-presentation.vtt",
+      "duration": 8,
+      "type": "photo-presentation",
+      "size_mib": 0.1,
+      "original": "Company profile reference image"
+    },
+    {
+      "id": "candlenut-photo-presentation",
+      "product": "candlenut",
+      "title": "Indonesian Candlenut \u2014 photo presentation",
+      "src": "assets/media/candlenut-photo-presentation.mp4",
+      "poster": "assets/media/candlenut-photo-presentation-poster.webp",
+      "track": "assets/media/candlenut-photo-presentation.vtt",
+      "duration": 8,
+      "type": "photo-presentation",
+      "size_mib": 0.12,
+      "original": "Company profile reference image"
+    }
+  ],
+  "notes": [
+    "Supplied clips are assigned by visual content.",
+    "Production equipment footage is kept separate because the specific process and product could not be established.",
+    "Carbon and candlenut videos are labeled photo-based presentations, not original footage.",
+    "Video appearance does not verify grade, purity, certification or shipment specifications."
+  ]
+}

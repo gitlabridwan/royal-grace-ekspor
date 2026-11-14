@@ -3,12 +3,12 @@ import * as THREE from './vendor/three/three.module.js';
 // Procedural illustrations of the commodity forms described in the supplied PDF.
 // These models are not scans, measurements, or guarantees of a shipment's appearance.
 export const PRODUCT_FORMS = Object.freeze({
-  vanilla: [{id:'bundle',idLabel:'Ikatan polong',enLabel:'Pod bundle'},{id:'single',idLabel:'Polong tunggal',enLabel:'Single pod'}],
-  coffee: [{id:'cluster',idLabel:'Kelompok biji',enLabel:'Bean cluster'},{id:'single',idLabel:'Biji tunggal',enLabel:'Single bean'}],
-  carbon: [{id:'granular',idLabel:'Granular',enLabel:'Granular'},{id:'pellet',idLabel:'Pellet',enLabel:'Pellet'},{id:'powder',idLabel:'Powder',enLabel:'Powder'}],
-  candlenut: [{id:'shell',idLabel:'Dengan cangkang',enLabel:'In shell'},{id:'kernel',idLabel:'Inti kemiri',enLabel:'Shelled kernels'}],
-  sulfur: [{id:'lump',idLabel:'Bongkahan',enLabel:'Lumps'},{id:'granular',idLabel:'Butiran',enLabel:'Granules'},{id:'powder',idLabel:'Bubuk',enLabel:'Powder'}],
-  broom: [{id:'bundle',idLabel:'Ikatan alami',enLabel:'Natural bundle'},{id:'handle',idLabel:'Dengan gagang',enLabel:'With handle'}]
+  vanilla: [{id:'bundle',enLabel:'Pod bundle'},{id:'single',enLabel:'Single pod'}],
+  coffee: [{id:'cluster',enLabel:'Bean cluster'},{id:'single',enLabel:'Single bean'}],
+  carbon: [{id:'granular',enLabel:'Granular'},{id:'pellet',enLabel:'Pellet'},{id:'powder',enLabel:'Powder'}],
+  candlenut: [{id:'shell',enLabel:'In shell'},{id:'kernel',enLabel:'Shelled kernels'}],
+  sulfur: [{id:'lump',enLabel:'Lumps'},{id:'granular',enLabel:'Granules'},{id:'powder',enLabel:'Powder'}],
+  broom: [{id:'bundle',enLabel:'Natural bundle'},{id:'handle',enLabel:'With handle'}]
 });
 
 function rng(seed=42){return()=>{seed|=0;seed=(seed+0x6D2B79F5)|0;let t=Math.imul(seed^(seed>>>15),1|seed);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296;};}

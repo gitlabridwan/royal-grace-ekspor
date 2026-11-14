@@ -3,12 +3,11 @@ import {OrbitControls} from './vendor/three/OrbitControls.js';
 import {createProductModel,disposeObject,PRODUCT_FORMS} from './product-models.js';
 
 const labels={
-  id:{title:'Jelajahi produk dalam 3D',products:'Pilih komoditas',model:'Model 3D',photo:'Foto referensi',form:'Pilihan bentuk',illustration:'ILUSTRASI 3D',reference:'VISUAL DARI PROFIL PERUSAHAAN',drag:'Seret untuk memutar · scroll / pinch untuk zoom',keyboard:'Keyboard: panah untuk putar, + / − untuk zoom, Home untuk reset.',note:'Ilustrasi bentuk, bukan hasil pemindaian produk. Warna, tekstur, ukuran, dan susunan tidak mewakili batch aktual. Tidak menggunakan skala pengukuran.',zoomIn:'Perbesar',zoomOut:'Perkecil',left:'Putar ke kiri',right:'Putar ke kanan',reset:'Reset tampilan',auto:'Putar otomatis',pause:'Hentikan putaran',fullscreen:'Layar penuh',exitFullscreen:'Keluar layar penuh',close:'Tutup penampil 3D',add:'Pilih untuk RFQ',remove:'Hapus dari RFQ',specs:'Spesifikasi lengkap',retry:'Coba 3D lagi',unsupported:'3D tidak tersedia pada browser/perangkat ini. Foto referensi tetap dapat dilihat.',lost:'Tampilan 3D terhenti. Gunakan foto referensi atau coba muat ulang 3D.',loading:'Menyiapkan model…',ready:'Three.js · 360°',about:'Tentang visual ini',variantNote:'Bentuk akhir dan ketersediaan dikonfirmasi dalam penawaran.'},
   en:{title:'Explore products in 3D',products:'Choose a commodity',model:'3D model',photo:'Reference photo',form:'Product form',illustration:'3D ILLUSTRATION',reference:'VISUAL FROM THE COMPANY PROFILE',drag:'Drag to rotate · scroll / pinch to zoom',keyboard:'Keyboard: arrows to rotate, + / − to zoom, Home to reset.',note:'An illustration of the form, not a product scan. Colors, textures, dimensions, and arrangement do not represent an actual batch. Not shown to a measurement scale.',zoomIn:'Zoom in',zoomOut:'Zoom out',left:'Rotate left',right:'Rotate right',reset:'Reset view',auto:'Auto rotate',pause:'Stop rotating',fullscreen:'Full screen',exitFullscreen:'Exit full screen',close:'Close 3D viewer',add:'Select for RFQ',remove:'Remove from RFQ',specs:'Full specifications',retry:'Retry 3D',unsupported:'3D is unavailable on this browser/device. You can still view the reference photo.',lost:'The 3D view was interrupted. View the reference photo or retry 3D.',loading:'Preparing the model…',ready:'Three.js · 360°',about:'About this visual',variantNote:'Final product form and availability are confirmed by quotation.'}
 };
 const svg=name=>`<svg class="icon" aria-hidden="true"><use href="#i-${name}"/></svg>`;
-let dialog,bridge,language='id',currentId='vanilla',currentForm='bundle',mode='3d',state=null,lastFocus=null,failure=null,initialized=false;
-const t=k=>labels[language][k];
+let dialog,bridge,language='en',currentId='vanilla',currentForm='bundle',mode='3d',state=null,lastFocus=null,failure=null,initialized=false;
+const t=k=>labels.en[k];
 const q=s=>dialog.querySelector(s);
 
 function buildShell(){
@@ -24,16 +23,16 @@ function renderText(){
   q('[data-product-tabs]').innerHTML=bridge.getProducts().map(p=>`<button data-viewer-product="${p.id}" class="${p.id===currentId?'active':''}" aria-pressed="${p.id===currentId}"><img src="assets/${p.image}.webp" alt="" width="28" height="28"><span>${p.name[language]}</span></button>`).join('');
   q('[data-product-title]').textContent=name;
   q('[data-product-description]').textContent=product.description[language];
-  q('[data-side-eyebrow]').textContent=language==='id'?'KOMODITAS PILIHAN':'SELECTED COMMODITY';
+  q('[data-side-eyebrow]').textContent='SELECTED COMMODITY';
   q('[data-form-label]').textContent=t('form');
-  q('[data-form-select]').innerHTML=PRODUCT_FORMS[currentId].map(f=>`<option value="${f.id}" ${f.id===currentForm?'selected':''}>${language==='id'?f.idLabel:f.enLabel}</option>`).join('');
+  q('[data-form-select]').innerHTML=PRODUCT_FORMS[currentId].map(f=>`<option value="${f.id}" ${f.id===currentForm?'selected':''}>${f.enLabel}</option>`).join('');
   q('[data-variant-note]').textContent=t('variantNote');
   q('[data-reference-photo]').src=`assets/${product.image}.webp`;
   q('[data-reference-photo]').alt=`${name} — ${t('reference')}`;
   q('[data-note-title]').textContent=t('about');q('[data-note]').textContent=t('note');
   q('[data-keyboard]').textContent=t('keyboard');
   for(const key of ['model','photo'])q(`[data-viewer-mode="${key==='model'?'3d':'photo'}"]`).textContent=t(key);
-  q('.viewer-modes').setAttribute('aria-label',language==='id'?'Mode tampilan':'Viewing mode');
+  q('.viewer-modes').setAttribute('aria-label','Viewing mode');
   for(const key of ['left','right','zoomIn','zoomOut','reset','close','retry']){
     const el=q(`[data-viewer-action="${key}"]`);el.setAttribute('aria-label',t(key));el.title=t(key);if(key==='retry')el.textContent=t(key);
   }
@@ -49,7 +48,7 @@ export function syncSelection(){
   button.innerHTML=`${svg(selected?'check':'plus')}<span>${t(selected?'remove':'add')}</span>`;
   button.classList.toggle('outline',selected);button.setAttribute('aria-pressed',String(selected));
 }
-export function setLanguage(value){language=value==='en'?'en':'id';renderText();}
+export function setLanguage(value){language='en';renderText();}
 
 function updateModeUI(){
   q('[data-canvas-host]').hidden=mode!=='3d';
@@ -176,7 +175,7 @@ function initializeDialog(){
 }
 
 export function openViewer(options){
-  initializeDialog();bridge=options.bridge;language=options.language==='en'?'en':'id';
+  initializeDialog();bridge=options.bridge;language='en';
   const id=PRODUCT_FORMS[options.id]?options.id:'vanilla';
   if(dialog.open){changeProduct(id);return;}
   lastFocus=document.activeElement;currentId=id;currentForm=PRODUCT_FORMS[id][0].id;mode='3d';failure=null;

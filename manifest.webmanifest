@@ -4,11 +4,11 @@
   "description": "Indonesian Origin. Global Trust.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#f8f6f0",
-  "theme_color": "#173e30",
+  "background_color": "#fff8eb",
+  "theme_color": "#064735",
   "icons": [
     {
-      "src": "assets/mark.svg",
+      "src": "assets/crown.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
