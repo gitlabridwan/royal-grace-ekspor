@@ -5,7 +5,7 @@ window.RGE_SITE_CONFIG = Object.freeze({ siteUrl: '' });
 
 (() => {
   if (!/^https?:$/.test(location.protocol)) return;
-  const { root, path, social } = document.body.dataset;
+  const { root, path, canonical, social } = document.body.dataset;
   let base = new URL(root, location.href);
   try {
     const configured = window.RGE_SITE_CONFIG.siteUrl.trim();
@@ -21,14 +21,14 @@ window.RGE_SITE_CONFIG = Object.freeze({ siteUrl: '' });
   } catch {
     // Use the current site root if the optional URL is invalid.
   }
-  const canonical = document.createElement('link');
-  canonical.rel = 'canonical';
-  canonical.href = new URL(path, base).href;
-  document.head.append(canonical);
+  const canonicalLink = document.createElement('link');
+  canonicalLink.rel = 'canonical';
+  canonicalLink.href = new URL(canonical ?? path, base).href;
+  document.head.append(canonicalLink);
 
   const graphUrl = document.createElement('meta');
   graphUrl.setAttribute('property', 'og:url');
-  graphUrl.content = canonical.href;
+  graphUrl.content = canonicalLink.href;
   document.head.append(graphUrl);
   document.querySelector('meta[property="og:image"]').content = new URL(social, base).href;
 

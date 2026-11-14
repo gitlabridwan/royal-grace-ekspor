@@ -8,7 +8,7 @@
   <meta name="description" content="Browse six Indonesian commodities. Compare product applications, photographs, specifications and packing options.">
   <meta property="og:title" content="Indonesian Natural Commodities | PT Royal Grace Exportindo">
   <meta property="og:description" content="Browse six Indonesian commodities. Compare product applications, photographs, specifications and packing options.">
-  <meta property="og:image" content="../assets/editorial/rice-terraces.webp">
+  <meta property="og:image" content="../assets/reference/catalog-banner.webp">
   <meta property="og:type" content="website">
   <link rel="icon" href="../assets/editorial/royal-grace-mark.webp" type="image/webp">
   <link rel="manifest" href="../manifest.webmanifest">
@@ -18,84 +18,86 @@
   <script src="../catalog-data.js" defer></script>
   <script src="../app.js" defer></script>
 </head>
-<body class="page-products" data-root="../" data-path="products/" data-social="assets/editorial/rice-terraces.webp">
+<body class="page-products design-products" data-root="../" data-path="products/" data-canonical="products/" data-social="assets/reference/catalog-banner.webp">
   <a href="#main" class="skip">Skip to content</a>
-  <header class="site-header">
+  <header class="site-header header-products">
     <div class="container header-inner">
       <a class="brand" href="../" aria-label="PT Royal Grace Exportindo home">
-    <img src="../assets/editorial/royal-grace-mark.webp" alt="" width="62" height="72">
-    <span><strong>PT Royal Grace Exportindo</strong><span class="brand-line">Export · Import · Commodities</span></span>
+    <img src="../assets/reference/products-mark.webp" alt="" width="86" height="92">
+    <span class="brand-name"><strong>PT Royal Grace Exportindo</strong><span class="brand-line">Export · Natural · Premium</span></span>
   </a>
-      <nav class="site-nav" id="siteNav" aria-label="Main navigation">
-        <a href="../">Home</a>
-        <a href="../about/">About</a>
-        <a href="../products/" aria-current="page">Products</a>
-        <a href="../#why">Why Us</a>
-        <a href="../export/">Export</a>
-        <a href="../contact/">Contact</a>
-      </nav>
-      <a class="btn btn-green header-quote" href="../contact/#inquiry">Get Quote<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
-      <button id="menuToggle" class="icon-button menu-toggle" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Open navigation" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg></button>
+      <div class="header-controls">
+        <nav class="site-nav" id="siteNav" aria-label="Main navigation">
+          <a href="../about/">About</a>
+          <a href="../products/" aria-current="page">Products</a>
+          <a href="../about/#sustainability">Sustainability</a>
+          <a href="../export/">Export</a>
+          <a href="../contact/">Contact</a>
+        </nav>
+        <a class="btn btn-outline header-quote" href="../contact/#inquiry">Get a Quote</a>
+        <button id="menuToggle" class="icon-button menu-toggle" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Open navigation" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg></button>
+      </div>
     </div>
   </header>
   <main id="main">
   <section class="scenery catalog-hero">
-    <img src="../assets/editorial/rice-terraces.webp" alt="" width="1900" height="706" fetchpriority="high">
-    
-    <div class="container scenery-content"><h1>Our Products<br>Premium Natural Commodities</h1><p>Indonesian ingredients, industrial materials and natural fibers for export.</p></div>
+    <img src="../assets/reference/catalog-banner.webp" alt="" fetchpriority="high">
+    <div class="container scenery-content"><h1>Our Products —<br>Premium Natural Commodities</h1><p>Sourced ethically from Indonesia. Export-quality natural commodities trusted worldwide.</p></div>
   </section>
   <section class="catalog container" id="products" aria-labelledby="catalogHeading">
     <div class="catalog-toolbar">
-      <div><h2 id="catalogHeading">Products Overview</h2><p id="productCount" role="status">Showing all 6 products</p></div>
-      <div class="catalog-controls" id="catalogControls" hidden>
-        <div class="filter-group" role="group" aria-label="Product category">
-          <button type="button" data-filter="all" aria-pressed="true">All products</button><button type="button" data-filter="agri" aria-pressed="false">Food &amp; Agriculture</button><button type="button" data-filter="industrial" aria-pressed="false">Industrial</button><button type="button" data-filter="craft" aria-pressed="false">Natural Fibers</button>
+      <div><h2 id="catalogHeading">Products Overview</h2><p id="productCount" role="status">Showing 6 products</p></div>
+      <details class="catalog-find" id="catalogFind" hidden>
+        <summary><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"/></svg> Search &amp; Filter</summary>
+        <div class="catalog-controls" id="catalogControls">
+          <div class="filter-group" role="group" aria-label="Product category">
+            <button type="button" data-filter="all" aria-pressed="true">All products</button><button type="button" data-filter="agri" aria-pressed="false">Food &amp; Agriculture</button><button type="button" data-filter="industrial" aria-pressed="false">Industrial</button><button type="button" data-filter="craft" aria-pressed="false">Natural Fibers</button>
+          </div>
+          <div class="search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"/></svg><input id="productSearch" type="search" placeholder="Search products" aria-label="Search products"></div>
         </div>
-        <div class="search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"/></svg><input id="productSearch" type="search" placeholder="Search products" aria-label="Search products"></div>
-      </div>
+      </details>
     </div>
     <div class="product-grid" id="productGrid">
       <article class="catalog-card" data-product="vanilla">
           <a href="../products/premium-vanilla-beans/" class="catalog-thumb" aria-label="View Vanilla"><img src="../assets/editorial/card-vanilla.webp" alt="" loading="lazy" decoding="async"></a>
           <h3><a href="../products/premium-vanilla-beans/">Vanilla</a></h3><p>Indonesian vanilla with a sweet aroma for food, extracts and fragrance.</p>
-          <div class="card-actions"><a class="btn btn-outline" href="../products/premium-vanilla-beans/">View Details</a><a class="btn btn-gold" href="../contact/?product=vanilla#inquiry">Get Quote</a></div>
+          <div class="card-actions"><a class="btn btn-outline" href="../products/premium-vanilla-beans/">View Detail</a><a class="btn btn-gold" href="../contact/?product=vanilla#inquiry">Get Quote</a></div>
         </article>
       <article class="catalog-card" data-product="coffee">
           <a href="../products/robusta-coffee/" class="catalog-thumb" aria-label="View Robusta Coffee"><img src="../assets/editorial/card-coffee.webp" alt="" loading="lazy" decoding="async"></a>
           <h3><a href="../products/robusta-coffee/">Robusta Coffee</a></h3><p>Full-bodied Indonesian Robusta for blends, espresso and instant coffee.</p>
-          <div class="card-actions"><a class="btn btn-outline" href="../products/robusta-coffee/">View Details</a><a class="btn btn-gold" href="../contact/?product=coffee#inquiry">Get Quote</a></div>
+          <div class="card-actions"><a class="btn btn-outline" href="../products/robusta-coffee/">View Detail</a><a class="btn btn-gold" href="../contact/?product=coffee#inquiry">Get Quote</a></div>
         </article>
       <article class="catalog-card" data-product="carbon">
           <a href="../products/activated-carbon/" class="catalog-thumb" aria-label="View Activated Carbon"><img src="../assets/editorial/card-carbon.webp" alt="" loading="lazy" decoding="async"></a>
           <h3><a href="../products/activated-carbon/">Activated Carbon</a></h3><p>Porous adsorbent for water treatment, gas filtration and industrial uses.</p>
-          <div class="card-actions"><a class="btn btn-outline" href="../products/activated-carbon/">View Details</a><a class="btn btn-gold" href="../contact/?product=carbon#inquiry">Get Quote</a></div>
+          <div class="card-actions"><a class="btn btn-outline" href="../products/activated-carbon/">View Detail</a><a class="btn btn-gold" href="../contact/?product=carbon#inquiry">Get Quote</a></div>
         </article>
       <article class="catalog-card" data-product="sulfur">
           <a href="../products/natural-sulfur/" class="catalog-thumb" aria-label="View Sulfur"><img src="../assets/editorial/card-sulfur.webp" alt="" loading="lazy" decoding="async"></a>
           <h3><a href="../products/natural-sulfur/">Sulfur</a></h3><p>Industrial sulfur in lump, granular, powder and pastille forms.</p>
-          <div class="card-actions"><a class="btn btn-outline" href="../products/natural-sulfur/">View Details</a><a class="btn btn-gold" href="../contact/?product=sulfur#inquiry">Get Quote</a></div>
+          <div class="card-actions"><a class="btn btn-outline" href="../products/natural-sulfur/">View Detail</a><a class="btn btn-gold" href="../contact/?product=sulfur#inquiry">Get Quote</a></div>
         </article>
       <article class="catalog-card" data-product="broom">
           <a href="../products/natural-palm-brooms/" class="catalog-thumb" aria-label="View Palm Broomstick"><img src="../assets/editorial/card-broom.webp" alt="" loading="lazy" decoding="async"></a>
-          <h3><a href="../products/natural-palm-brooms/">Palm Broomstick</a></h3><p>Hand-tied palm midrib brooms for home, garden and outdoor cleaning.</p>
-          <div class="card-actions"><a class="btn btn-outline" href="../products/natural-palm-brooms/">View Details</a><a class="btn btn-gold" href="../contact/?product=broom#inquiry">Get Quote</a></div>
+          <h3><a href="../products/natural-palm-brooms/">Broomstick</a></h3><p>Hand-tied palm midrib brooms for home, garden and outdoor cleaning.</p>
+          <div class="card-actions"><a class="btn btn-outline" href="../products/natural-palm-brooms/">View Detail</a><a class="btn btn-gold" href="../contact/?product=broom#inquiry">Get Quote</a></div>
         </article>
       <article class="catalog-card" data-product="candlenut">
           <a href="../products/candlenut/" class="catalog-thumb" aria-label="View Candlenut"><img src="../assets/editorial/card-candlenut.webp" alt="" loading="lazy" decoding="async"></a>
           <h3><a href="../products/candlenut/">Candlenut</a></h3><p>Indonesian candlenut for traditional recipes and oil processing.</p>
-          <div class="card-actions"><a class="btn btn-outline" href="../products/candlenut/">View Details</a><a class="btn btn-gold" href="../contact/?product=candlenut#inquiry">Get Quote</a></div>
+          <div class="card-actions"><a class="btn btn-outline" href="../products/candlenut/">View Detail</a><a class="btn btn-gold" href="../contact/?product=candlenut#inquiry">Get Quote</a></div>
         </article>
     </div>
     <div id="noResults" class="empty-state" hidden><h3>No products found</h3><p>Try a different keyword or category.</p><button id="resetSearch" type="button" class="btn btn-outline">Reset search</button></div>
   </section>
   </main>
-  <footer class="site-footer">
+  <footer class="site-footer footer-products">
     
-    <div class="footer-bottom">
-      <div class="container"><span>© <span id="year">2026</span> PT Royal Grace Exportindo</span>
-        <nav aria-label="Footer"><button type="button" data-policy="privacy">Privacy Policy</button><button type="button" data-policy="terms">Terms of Use</button><a href="../export/#quality">Quality &amp; Documentation</a><a href="mailto:info@royalgraceexportindo.com">info@royalgraceexportindo.com</a></nav>
-      </div>
-    </div>
+    
+    <div class="footer-bottom"><div class="container"><span>© <span id="year">2026</span> PT Royal Grace Exportindo. All rights reserved.</span>
+      <nav aria-label="Footer"><button type="button" data-policy="privacy">Privacy Policy</button><button type="button" data-policy="terms">Terms of Use</button><a href="../export/#quality">Quality &amp; Documentation</a><a href="mailto:info@royalgraceexportindo.com">info@royalgraceexportindo.com</a></nav>
+    </div></div>
   </footer>
   
   <aside id="shortlistBar" class="shortlist-bar" aria-label="Selected products" hidden>
