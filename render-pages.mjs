@@ -26,10 +26,6 @@ const quote = (base, product) => `${base}contact/${product ? `?product=${encodeU
 const action = (href, label, style = '', graphic = '') =>
   `<a class="btn ${style}" href="${href}">${label}${graphic ? icon(graphic) : ''}</a>`;
 const options = [['all', 'All products'], ['agri', 'Food &amp; Agriculture'], ['industrial', 'Industrial'], ['craft', 'Natural Fibers']];
-const homeOptions = [
-  ['all', 'All products'], ['agri', 'Food &amp; beverage'], ['carbon', 'Water &amp; air filtration'],
-  ['sulfur', 'Rubber &amp; fertilizer'], ['craft', 'Home &amp; garden']
-];
 const category = { agri: 'Food & Agriculture', industrial: 'Industrial', craft: 'Natural Fibers' };
 const icons = {
   arrow: '<path d="M4 12h15m-6-6 6 6-6 6"/>',
@@ -164,6 +160,7 @@ ${main}
 function scenery(base, { title, description, actions = '', variant = '', id = '', tag = 'section' }) {
   return `<${tag} class="scenery ${variant}"${id ? ` id="${id}"` : ''}>
     ${editorial(base, 'rice-terraces', '', 'width="1900" height="706" fetchpriority="high"')}
+    ${variant === 'home-hero' ? '<div class="hero-waves" aria-hidden="true"></div>' : ''}
     <div class="container scenery-content"><h1>${title}</h1><p>${description}</p>${actions ? `<div class="actions">${actions}</div>` : ''}</div>
   </${tag}>`;
 }
@@ -182,54 +179,43 @@ const descriptions = {
 };
 
 function home(base) {
-  return `  <section class="home-hero" id="home" aria-labelledby="homeTitle">
-    ${photo(base, landscape, '', 'width="1900" height="706" fetchpriority="high"')}
-    <div class="container">
-      <div class="home-hero-panel">
-        <h1 id="homeTitle">From Indonesian nature to the world</h1>
-        <p>Indonesian ingredients, industrial materials and natural fibers, with packing and export support.</p>
-        <div class="actions">${action('#home-products', 'Explore products', 'btn-gold', 'arrow')}${action(quote(base), 'Request a quote', 'btn-outline')}</div>
-      </div>
-    </div>
+  return `  ${scenery(base, {
+    title: 'Bridging Nations, Enriching Lives',
+    description: 'Premium Indonesian Commodities. From Indonesia to the World.',
+    variant: 'home-hero', id: 'home',
+    actions: action(`${base}products/`, 'Explore Products', 'btn-gold', 'arrow') + action(`${base}contact/`, 'Contact Us', 'btn-light', 'chat')
+  })}
+  <section class="trust-strip" aria-label="Sourcing priorities">
+    <ul class="container"><li>${icon('leaf')} Sourced in Indonesia</li><li>${icon('shield')} Batch Quality &amp; Testing</li><li>${icon('globe')} Global Export Support</li></ul>
   </section>
-  <section class="home-portfolio container" id="home-products" aria-labelledby="homeProducts">
-    <div class="section-heading center"><h2 id="homeProducts">Our products</h2></div>
-    <div class="filter-group home-filters" id="homeProductFilters" role="group" aria-label="Explore by application" hidden>
-      ${homeOptions.map(([key, label]) => `<button type="button" data-home-filter="${key}" aria-pressed="${key === 'all'}" aria-controls="homeProductGrid">${label}</button>`).join('')}
-    </div>
-    <p class="visually-hidden" id="homeProductCount" role="status"></p>
-    <div class="home-product-grid" id="homeProductGrid">
-      ${products.map(p => {
-        const view = productPages[p.id];
-        const [image, , width, height] = view.hero;
-        const group = p.category === 'industrial' ? p.id : p.category;
-        return `<a class="home-product-card" data-home-group="${group}" href="${nicePath(p, base)}">
-          ${photo(base, image, '', `class="home-product-image" width="${width}" height="${height}" loading="lazy" decoding="async"`)}
-          <div class="home-product-text"><h3>${escape(view.label)}</h3><p>${escape(view.summary)}</p>${icon('arrow')}</div>
-        </a>`;
-      }).join('\n      ')}
-    </div>
-  </section>
-  <section class="home-sourcing" id="why" aria-labelledby="whyHeading">
-    <div class="container home-sourcing-inner">
-      <div class="home-sourcing-media">
-        <a class="home-story-link" href="${base}about/#our-story">
-          ${editorial(base, 'home-sourcing', '', 'width="339" height="258" loading="lazy" decoding="async"')}
-          <span>Local sourcing ${icon('arrow')}</span>
-        </a>
-        <a class="home-story-link" href="${base}export/#solutions">
-          ${editorial(base, 'home-packing', '', 'width="337" height="178" loading="lazy" decoding="async"')}
-          <span>Export preparation ${icon('arrow')}</span>
-        </a>
+  <section class="home-portfolio container" aria-labelledby="homeProducts">
+    <div class="section-heading center"><h2 id="homeProducts">Our Products</h2><p>From Indonesian farms and producers to buyers around the world.</p></div>
+    <div class="home-columns">
+      <div class="mini-grid">
+        ${products.map(p => {
+          const view = productPages[p.id];
+          return `<a class="mini-card" href="${nicePath(p, base)}">
+            <div class="catalog-thumb">${editorial(base, `card-${p.id}`, '')}</div>
+            <h3>${view.label}</h3><span>View details ${icon('arrow')}</span>
+          </a>`;
+        }).join('\n        ')}
       </div>
-      <div class="why-panel">
-        <h2 id="whyHeading">Why choose Royal Grace?</h2>
+      <section class="why-panel" id="why" aria-labelledby="whyHeading">
+        <h2 id="whyHeading">Why Choose Us</h2>
         <ul>
-          <li>${icon('leaf')}<div><h3>Indonesian sourcing</h3><p>We work with local farmers and producers.</p></div></li>
-          <li>${icon('shield')}<div><h3>Quality selection</h3><p>Review samples, product specifications and batch testing options.</p></div></li>
-          <li>${icon('globe')}<div><h3>Export support</h3><p>Discuss packing, documents and shipment coordination with our team.</p></div></li>
+          <li>${icon('globe')}<div><h3>Global Export</h3><p>Packaging, documents and shipment coordination.</p></div></li>
+          <li>${icon('shield')}<div><h3>Quality Selection</h3><p>Samples, agreed specifications and batch testing.</p></div></li>
+          <li>${icon('leaf')}<div><h3>Local Sourcing</h3><p>We work with Indonesian farmers and producers.</p></div></li>
         </ul>
-      </div>
+        <a class="text-link" href="${base}export/">View export services ${icon('arrow')}</a>
+      </section>
+      <aside class="home-note" aria-labelledby="homeNoteHeading">
+        <p class="note-motif" aria-hidden="true">✧</p>
+        <h2 id="homeNoteHeading">Our Commitment</h2>
+        <blockquote>Royal in Quality.<br>Graceful in Service.</blockquote>
+        <p>We help buyers agree on product quality, packaging and documents before shipment.</p>
+        <a class="text-link" href="${base}about/">About Royal Grace ${icon('arrow')}</a>
+      </aside>
     </div>
   </section>`;
 }
@@ -300,19 +286,19 @@ function about(base) {
 
 function productDetail(base, p) {
   const view = productPages[p.id];
-  const [image, imageAlt, width, height] = view.hero;
   return `  <nav class="breadcrumbs" aria-label="Breadcrumb"><div class="container">
     <a href="${base}">Home</a>${icon('chevron')}<a href="${base}products/">Products</a>${icon('chevron')}<span aria-current="page">${escape(view.label)}</span>
   </div></nav>
-  <header class="product-hero">
+  <header class="product-hero hero-${p.id}${view.feature ? ' has-feature' : ''}">
+    ${editorial(base, view.hero, '', 'fetchpriority="high"')}
     <div class="container product-hero-inner">
       <div class="product-hero-copy">
         <p class="product-category">${escape(category[p.category])}</p>
         <h1>${escape(view.title)}</h1><p>${escape(view.subtitle)}</p>
-        <div class="actions">${action(quote(base, p), 'Get Quote', 'btn-gold', 'arrow')}<a class="btn btn-outline" href="${base}assets/specs/${view.slug}.pdf" download>${icon('download')}Download Spec Sheet</a></div>
+        <div class="actions">${action(quote(base, p), 'Get Quote', 'btn-gold', 'arrow')}<a class="btn btn-light" href="${base}assets/specs/${view.slug}.pdf" download>${icon('download')}Download Spec Sheet</a></div>
         <p class="product-highlight">${icon('check')}${escape(view.highlight)}</p>
       </div>
-      <figure class="product-hero-photo">${photo(base, image, imageAlt, `width="${width}" height="${height}" fetchpriority="high" decoding="async"`)}</figure>
+      ${view.feature ? `<figure class="hero-feature">${editorial(base, ...view.feature, 'decoding="async"')}</figure>` : ''}
     </div>
   </header>
   <div class="container product-content ${p.id}-content">
@@ -452,7 +438,7 @@ const pages = [
   ...products.map(product => {
     const view = productPages[product.id];
     return { path: `products/${view.slug}/`, base: '../../', page: 'product', main: productDetail('../../', product),
-      title: `${view.title} | ${name}`, description: view.subtitle, social: view.hero[0] };
+      title: `${view.title} | ${name}`, description: view.subtitle, social: `assets/editorial/${view.hero}.webp` };
   })
 ];
 

@@ -824,7 +824,7 @@ window.RGE_DATA.productPages = {
     summary: 'Indonesian Vanilla planifolia in Gourmet Grade A and Extract Grade B.',
     subtitle: 'Indonesian vanilla beans with a rich, sweet aroma for food, beverages, extracts, fragrances and cosmetics.',
     highlight: 'Gourmet Grade A and Extract Grade B',
-    hero: ['assets/vanilla.webp', 'Cured vanilla pods arranged on a rustic surface', 312, 176],
+    hero: 'vanilla-grove',
     gallery: [
       ['assets/editorial/vanilla-pods.webp', 'Cured vanilla pods'],
       ['assets/editorial/vanilla-flower.webp', 'Vanilla orchid flower'],
@@ -843,7 +843,7 @@ window.RGE_DATA.productPages = {
     summary: 'Indonesian green Robusta for espresso blends and instant coffee.',
     subtitle: 'Green Robusta beans with a full body and chocolate notes for espresso blends and instant coffee.',
     highlight: 'Grade 1 · Screen size 16–18',
-    hero: ['assets/coffee.webp', 'Green Robusta coffee beans in a bowl', 472, 286],
+    hero: 'coffee-hills',
     gallery: [
       ['assets/editorial/coffee-cherries.webp', 'Ripe coffee cherries on the branch'],
       ['assets/coffee.webp', 'Robusta beans from the company profile'],
@@ -863,7 +863,8 @@ window.RGE_DATA.productPages = {
     summary: 'Granular, powdered and pelletized carbon for filtration and industrial adsorption.',
     subtitle: 'Porous activated carbon for water purification, air and gas filtration, and industrial adsorption.',
     highlight: 'Granular, powder and pellet',
-    hero: ['assets/carbon.webp', 'Close view of black activated carbon pieces and granules', 376, 194],
+    hero: 'coconut-plantation',
+    feature: ['carbon-and-shell', 'Black activated carbon granules beside coconut shells in a reference image'],
     gallery: [
       ['assets/media/carbon-granular.webp', 'Granular activated carbon'],
       ['assets/media/carbon-powder.webp', 'Powdered activated carbon'],
@@ -882,7 +883,8 @@ window.RGE_DATA.productPages = {
     summary: 'Sulfur lumps, granules, powder and pastilles for industrial and agricultural use.',
     subtitle: 'Industrial sulfur for chemical processing, rubber vulcanization and fertilizer production.',
     highlight: '99.92% total sulfur in the tested sample',
-    hero: ['assets/editorial/sulfur-granules.webp', 'Yellow sulfur granules in a dark dish', 406, 270],
+    hero: 'sulfur-crater',
+    feature: ['card-sulfur', 'Yellow sulfur powder on a pale surface'],
     gallery: [
       ['assets/sulfur.webp', 'Yellow sulfur from the company profile'],
       ['assets/media/sulfur-granules-photo-1.webp', 'Bulk yellow granules from the supplied footage'],
@@ -901,7 +903,7 @@ window.RGE_DATA.productPages = {
     summary: 'Areca palm midribs in tied bundles or finished brooms with wooden handles.',
     subtitle: 'Traditional Indonesian sapu lidi for sweeping homes, gardens and yards.',
     highlight: 'Tied by hand from natural areca palm midribs',
-    hero: ['assets/editorial/broom-palm.webp', 'Tied bundles of natural palm broomsticks', 718, 328],
+    hero: 'broom-palm',
     gallery: [
       ['assets/editorial/broom-fibers.webp', 'Close-up of dried palm midribs'],
       ['assets/editorial/broom-bundles.webp', 'Palm broom bundles tied with twine'],
@@ -920,7 +922,8 @@ window.RGE_DATA.productPages = {
     summary: 'Whole candlenuts and shelled kernels for cooking and oil production.',
     subtitle: 'Indonesian candlenuts for seasoning, thickening dishes and producing oil for cosmetics.',
     highlight: 'Indonesian origin · Whole nuts and shelled kernels',
-    hero: ['assets/editorial/candlenut-bowl.webp', 'Bowls of candlenut kernels and whole candlenuts', 539, 237],
+    hero: 'candlenut-trees',
+    feature: ['candlenut-bowl', 'A wooden bowl of candlenut kernels beside nuts in their shells'],
     gallery: [
       ['assets/media/candlenut-whole.webp', 'Whole candlenuts'],
       ['assets/media/candlenut-kernels.webp', 'Shelled candlenut kernels'],

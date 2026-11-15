@@ -145,22 +145,6 @@ function initializeCatalog() {
   $('#catalogControls').hidden = false;
 }
 
-function initializeHomeProducts() {
-  const filters = $('#homeProductFilters');
-  if (!filters) return;
-  const buttons = $$('[data-home-filter]', filters);
-  const cards = $$('#homeProductGrid [data-home-group]');
-  const count = $('#homeProductCount');
-  buttons.forEach(button => button.addEventListener('click', () => {
-    const group = button.dataset.homeFilter;
-    buttons.forEach(option => option.setAttribute('aria-pressed', String(option === button)));
-    cards.forEach(card => { card.hidden = group !== 'all' && card.dataset.homeGroup !== group; });
-    const visible = cards.filter(card => !card.hidden).length;
-    count.textContent = visible === 1 ? 'Showing 1 product' : 'Showing ' + visible + ' products';
-  }));
-  filters.hidden = false;
-}
-
 const focusBeforeOpen = new WeakMap();
 
 function openDialog(dialog) {
@@ -403,7 +387,6 @@ if (location.protocol === 'file:') {
   }
 }
 initializeNavigation();
-initializeHomeProducts();
 initializeCatalog();
 initializeDialogs();
 initializeGallery();
