@@ -14,6 +14,7 @@ const profile = 'assets/royal-grace-company-profile.pdf';
 const mark = 'assets/editorial/royal-grace-logo.webp';
 const favicon = 'assets/editorial/royal-grace-icon.png';
 const landscape = 'assets/editorial/rice-terraces.webp';
+const homeLandscape = 'assets/editorial/home-terraces-and-commodities.webp';
 const escape = value => String(value).replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 })[character]);
@@ -160,7 +161,6 @@ ${main}
 function scenery(base, { title, description, actions = '', variant = '', id = '', tag = 'section' }) {
   return `<${tag} class="scenery ${variant}"${id ? ` id="${id}"` : ''}>
     ${editorial(base, 'rice-terraces', '', 'width="1900" height="706" fetchpriority="high"')}
-    ${variant === 'home-hero' ? '<div class="hero-waves" aria-hidden="true"></div>' : ''}
     <div class="container scenery-content"><h1>${title}</h1><p>${description}</p>${actions ? `<div class="actions">${actions}</div>` : ''}</div>
   </${tag}>`;
 }
@@ -179,43 +179,62 @@ const descriptions = {
 };
 
 function home(base) {
-  return `  ${scenery(base, {
-    title: 'Bridging Nations, Enriching Lives',
-    description: 'Premium Indonesian Commodities. From Indonesia to the World.',
-    variant: 'home-hero', id: 'home',
-    actions: action(`${base}products/`, 'Explore Products', 'btn-gold', 'arrow') + action(`${base}contact/`, 'Contact Us', 'btn-light', 'chat')
-  })}
-  <section class="trust-strip" aria-label="Sourcing priorities">
-    <ul class="container"><li>${icon('leaf')} Sourced in Indonesia</li><li>${icon('shield')} Batch Quality &amp; Testing</li><li>${icon('globe')} Global Export Support</li></ul>
-  </section>
-  <section class="home-portfolio container" aria-labelledby="homeProducts">
-    <div class="section-heading center"><h2 id="homeProducts">Our Products</h2><p>From Indonesian farms and producers to buyers around the world.</p></div>
-    <div class="home-columns">
-      <div class="mini-grid">
-        ${products.map(p => {
-          const view = productPages[p.id];
-          return `<a class="mini-card" href="${nicePath(p, base)}">
-            <div class="catalog-thumb">${editorial(base, `card-${p.id}`, '')}</div>
-            <h3>${view.label}</h3><span>View details ${icon('arrow')}</span>
-          </a>`;
-        }).join('\n        ')}
+  const order = new Map(['vanilla', 'carbon', 'candlenut', 'sulfur', 'coffee', 'broom'].map((id, index) => [id, index]));
+  const featured = [...products].sort((a, b) => (order.get(a.id) ?? order.size) - (order.get(b.id) ?? order.size));
+  return `  <section class="home-hero" id="home" aria-labelledby="home-title">
+    ${photo(base, homeLandscape, '', 'width="2172" height="724" fetchpriority="high"')}
+    <div class="container home-hero-inner">
+      <div class="home-hero-panel">
+        <h1 id="home-title">Bridging Nations,<br><span>Enriching Lives</span></h1>
+        <p class="home-hero-lead">Premium Indonesian commodities</p>
+        <p>Source Indonesian ingredients, industrial materials and natural fibers with packing and export support.</p>
+        <div class="actions">${action('#home-products', 'Explore products', 'btn-gold', 'arrow')}${action(quote(base), 'Request a quote', 'btn-outline')}</div>
       </div>
-      <section class="why-panel" id="why" aria-labelledby="whyHeading">
-        <h2 id="whyHeading">Why Choose Us</h2>
+    </div>
+  </section>
+  <nav class="trust-strip" aria-label="Sourcing and export information">
+    <ul class="container">
+      <li><a href="${base}about/#our-story">${icon('leaf')} Local sourcing</a></li>
+      <li><a href="${base}export/#quality">${icon('shield')} Batch quality</a></li>
+      <li><a href="${base}export/#solutions">${icon('globe')} Export support</a></li>
+    </ul>
+  </nav>
+  <section class="home-portfolio container" id="home-products" aria-labelledby="homeProducts">
+    <div class="section-heading center"><h2 id="homeProducts">Our products</h2></div>
+    <div class="home-product-grid">
+      ${featured.map(p => {
+        const view = productPages[p.id];
+        const image = p.id === 'coffee'
+          ? photo(base, 'assets/coffee.webp', '', 'class="home-coffee-photo" loading="lazy" decoding="async"')
+          : editorial(base, `card-${p.id}`, '');
+        return `<a class="home-product-card" href="${nicePath(p, base)}">
+          <div class="home-product-art">${image}</div>
+          <div class="home-product-copy"><h3>${escape(view.label)}</h3><p>${escape(view.summary)}</p></div>
+          <span class="home-product-link">View details ${icon('arrow')}</span>
+        </a>`;
+      }).join('\n      ')}
+    </div>
+  </section>
+  <section class="home-sourcing" id="why" aria-labelledby="whyHeading">
+    <div class="container home-sourcing-grid">
+      <div class="why-panel">
+        <h2 id="whyHeading">Why choose Royal Grace?</h2>
         <ul>
-          <li>${icon('globe')}<div><h3>Global Export</h3><p>Packaging, documents and shipment coordination.</p></div></li>
-          <li>${icon('shield')}<div><h3>Quality Selection</h3><p>Samples, agreed specifications and batch testing.</p></div></li>
-          <li>${icon('leaf')}<div><h3>Local Sourcing</h3><p>We work with Indonesian farmers and producers.</p></div></li>
+          <li>${icon('leaf')}<div><h3>Indonesian sourcing</h3><p>We work with local farmers and producers.</p></div></li>
+          <li>${icon('shield')}<div><h3>Quality selection</h3><p>Review samples, product specifications and batch testing options.</p></div></li>
+          <li>${icon('globe')}<div><h3>Export support</h3><p>Discuss packing, documents and shipment coordination.</p></div></li>
         </ul>
-        <a class="text-link" href="${base}export/">View export services ${icon('arrow')}</a>
-      </section>
-      <aside class="home-note" aria-labelledby="homeNoteHeading">
-        <p class="note-motif" aria-hidden="true">✧</p>
-        <h2 id="homeNoteHeading">Our Commitment</h2>
-        <blockquote>Royal in Quality.<br>Graceful in Service.</blockquote>
-        <p>We help buyers agree on product quality, packaging and documents before shipment.</p>
-        <a class="text-link" href="${base}about/">About Royal Grace ${icon('arrow')}</a>
-      </aside>
+      </div>
+      <div class="home-sourcing-media">
+        <a href="${base}about/#our-story">
+          ${editorial(base, 'home-sourcing', '', 'width="339" height="258" loading="lazy" decoding="async"')}
+          <span>Local sourcing ${icon('arrow')}</span>
+        </a>
+        <a href="${base}export/#solutions">
+          ${editorial(base, 'home-packing', '', 'width="337" height="178" loading="lazy" decoding="async"')}
+          <span>Export preparation ${icon('arrow')}</span>
+        </a>
+      </div>
     </div>
   </section>`;
 }
@@ -430,7 +449,7 @@ function contact(base) {
 }
 
 const pages = [
-  { path: '', base: './', page: 'home', main: home('./') },
+  { path: '', base: './', page: 'home', main: home('./'), social: homeLandscape },
   { path: 'about/', base: '../', page: 'about', main: about('../') },
   { path: 'products/', base: '../', page: 'products', main: catalog('../'), shortFooter: true },
   { path: 'export/', base: '../', page: 'export', main: exportPage('../') },
