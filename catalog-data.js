@@ -19,7 +19,7 @@ window.RGE_DATA = {
         "en": "INDONESIA · VANILLA PLANIFOLIA"
       },
       "description": {
-        "en": "A rich, sweet aroma for food, extracts, and fragrance applications."
+        "en": "Indonesian Vanilla planifolia with a rich, sweet aroma for food, beverages, vanilla extracts, fragrances and cosmetics."
       },
       "tag": {
         "en": "Grade A & B"
@@ -53,16 +53,16 @@ window.RGE_DATA = {
         ]
       },
       "note": {
-        "en": "Company-provided specifications, subject to batch verification. The cured-bean image is a reference; green pods in the PDF depict cultivation, not finished cured Grade A beans."
+        "en": "Confirm these company specifications for the batch you order. The company profile shows green pods in cultivation and a separate reference image of cured beans."
       },
       "story": [
-        "Indonesian vanilla brings a rich, sweet aroma to food, extract, and fragrance applications. The company portfolio includes Gourmet Grade A and Extract Grade B options, allowing buyers to discuss the form that fits their production process.",
-        "A useful quotation starts with the intended application, required length, moisture range, aroma profile, and packaging. The supplied videos show pods at different handling and preparation stages; their appearance should not be treated as proof of a finished grade. Agree the curing stage and batch specification before placing an order."
+        "Royal Grace Exportindo offers Indonesian Vanilla planifolia in Gourmet Grade A and Extract Grade B. The profile lists Grade A beans at 15–20 cm with an oily, flexible texture. The beans have a rich, sweet aroma reminiscent of Bourbon vanilla.",
+        "For a quote, specify the grade, pod length, moisture range and vanillin content you need. Confirm the curing stage and batch specifications."
       ],
       "applications": [
-        "Food & flavoring",
+        "Food & beverages",
         "Vanilla extraction",
-        "Fragrance ingredients"
+        "Fragrance & cosmetics"
       ],
       "steps": [
         "Confirm the intended application and required grade.",
@@ -70,7 +70,7 @@ window.RGE_DATA = {
         "Evaluate a sample and agree the batch specification.",
         "Confirm vacuum-pack sizes, carton requirements, and delivery terms."
       ],
-      "packing": "The profile lists vacuum-sealed 1 kg and 5 kg packs inside cartons. Confirm pack size, labeling, and the final product condition with the team.",
+      "packing": "The profile lists 1 kg and 5 kg vacuum packs in cartons. Specify the pack size and labeling you need.",
       "questions": [
         "Gourmet beans or extraction material?",
         "Required length and moisture range?",
@@ -122,7 +122,7 @@ window.RGE_DATA = {
         "en": "SUMATRA · JAVA · FLORES · LAMPUNG"
       },
       "description": {
-        "en": "A strong, full-bodied character with chocolate notes for your coffee blends."
+        "en": "Indonesian green Robusta with a full body and chocolate notes. Processing options include washed, natural and honey."
       },
       "tag": {
         "en": "Grade 1 · Size 16–18"
@@ -156,16 +156,15 @@ window.RGE_DATA = {
         ]
       },
       "note": {
-        "en": "Profile specifications require batch confirmation. A definitive bean-defect limit is not shown because the profile contains inconsistent figures; confirm the correct limit with the company before ordering."
+        "en": "The company profile lists conflicting limits for bean defects. Confirm the applicable defect limit, grade and other specifications for the batch before ordering."
       },
       "story": [
-        "Robusta coffee is offered for buyers seeking a strong, full-bodied profile for blends and industrial coffee processing. The company profile lists origins including Sumatra, Java, Flores, and Lampung, with washed, natural, and honey processing options to discuss.",
-        "The attached footage gives a closer look at green beans and their handling. It does not establish the grade of a future shipment. For a practical sourcing discussion, specify origin preference, processing method, bean size, moisture, defect acceptance criteria, and packaging."
+        "These Indonesian green Robusta beans are suited to espresso blends and instant coffee, with a bold character, full body and chocolate notes. The profile lists origins in Sumatra, Java, Flores and Lampung, with washed, natural and honey processing options.",
+        "For a quote, specify your preferred origin and processing method, then agree on screen size, moisture and defect criteria for the batch."
       ],
       "applications": [
         "Espresso blends",
-        "Instant coffee",
-        "Coffee processing"
+        "Instant coffee production"
       ],
       "steps": [
         "Specify the origin and processing preference.",
@@ -173,7 +172,7 @@ window.RGE_DATA = {
         "Review a sample and the relevant batch information.",
         "Confirm bag lining, quantity, shipping terms, and destination."
       ],
-      "packing": "The profile lists 60 kg jute bags with a PE liner. Confirm lining, labeling, and loading requirements for the specific order.",
+      "packing": "The listed pack is a 60 kg jute bag with a polyethylene (PE) liner. Confirm the lining, labeling and loading requirements for your order.",
       "questions": [
         "Which origin and processing method?",
         "Which screen size and defect criteria?",
@@ -225,7 +224,7 @@ window.RGE_DATA = {
         "en": "INDONESIA · INDUSTRIAL MATERIAL"
       },
       "description": {
-        "en": "A porous adsorbent for water filtration, gas purification, and industrial uses."
+        "en": "Porous activated carbon for water treatment, air and gas filtration, gold recovery and industrial adsorption."
       },
       "tag": {
         "en": "Granular · Powder · Pellet"
@@ -259,15 +258,16 @@ window.RGE_DATA = {
         ]
       },
       "note": {
-        "en": "Sample analysis: PT Carsurin Cikarang, 15 December 2025. Results apply only to the tested sample; the report does not identify its feedstock source. The coconut-shell process in the profile is illustrative. Final grade is subject to buyer requirements."
+        "en": "Results are from one sample tested by PT Carsurin Cikarang on 15 December 2025. The report leaves the feedstock unspecified. The company profile uses coconut shells to illustrate the production process."
       },
       "story": [
-        "Activated carbon is a porous adsorbent used to help remove selected impurities from liquids and gases. The portfolio includes granular, powder, and pellet forms for applications such as water treatment, air or gas filtration, and industrial adsorption.",
-        "Performance depends on the application and agreed grade. Discuss the target contaminants, particle size, operating conditions, and test requirements with the team. Laboratory values in the company profile refer to a tested sample and should not be treated as a guarantee for every batch or as proof of a specific feedstock source."
+        "Activated carbon uses a porous surface to adsorb impurities and odors from liquids and gases. The profile lists granules for water and air filtration, fine powder for industrial adsorption and pellets for gas purification. Select the form and grade for your application.",
+        "For a quote, specify the target contaminants, operating conditions, particle size and test parameters. Review the certificate of analysis for the batch being offered."
       ],
       "applications": [
-        "Water treatment",
+        "Water purification",
         "Air & gas filtration",
+        "Gold recovery",
         "Industrial adsorption"
       ],
       "steps": [
@@ -276,7 +276,7 @@ window.RGE_DATA = {
         "Agree performance parameters and sample testing.",
         "Confirm packaging, documentation, and the batch COA."
       ],
-      "packing": "Packaging and particle sizing should be specified for the selected form and application. Ask for the final configuration in the quotation.",
+      "packing": "Specify the packaging and particle size you need for the selected form and grade.",
       "questions": [
         "Which liquid or gas treatment application?",
         "Which particle size and physical form?",
@@ -327,10 +327,10 @@ window.RGE_DATA = {
         "en": "INDONESIA · INDUSTRIAL GRADE"
       },
       "description": {
-        "en": "A choice of sulfur forms for chemical, rubber, and agricultural applications."
+        "en": "Industrial sulfur for chemical processing, rubber vulcanization, fertilizer production and other agricultural uses."
       },
       "tag": {
-        "en": "Lump · Granular · Powder"
+        "en": "Lump · Granular · Powder · Pastilles"
       },
       "specs": {
         "en": [
@@ -361,16 +361,17 @@ window.RGE_DATA = {
         ]
       },
       "note": {
-        "en": "The profile’s test results reference SUCOFINDO report LAP-S-0724-075, 24 July 2026, for the tested sample. They do not guarantee all batches. Confirm any company-promoted purity range against the actual batch COA."
+        "en": "The table shows results from one sample in SUCOFINDO report LAP-S-0724-075, dated 24 July 2026. Confirm purity for your order against the certificate of analysis for that batch."
       },
       "story": [
-        "Industrial sulfur is offered in lump, granular, powder, and pastille forms for buyers in chemical processing, rubber manufacturing, and agriculture. The right format depends on the buyer’s process, handling arrangements, and agreed specifications.",
-        "The supplied video shows yellow granular material in bulk. Appearance does not establish chemical purity. The 99.92% sulfur result in the company profile belongs to a tested sample reported on 24 July 2026; request the relevant batch COA and agreed handling documentation for an actual order."
+        "Royal Grace Exportindo offers industrial sulfur as lumps, granules, powder and pastilles. Typical applications include chemical processing, rubber vulcanization and fertilizer production. Choose the form that fits your process and bulk handling requirements.",
+        "For a quote, specify the physical form and the purity, moisture and ash limits your process requires. Request the batch certificate of analysis and handling documents."
       ],
       "applications": [
         "Chemical processing",
-        "Rubber manufacturing",
-        "Agricultural inputs"
+        "Rubber vulcanization",
+        "Fertilizer production",
+        "Agriculture"
       ],
       "steps": [
         "Select the required physical form.",
@@ -378,7 +379,7 @@ window.RGE_DATA = {
         "Review the relevant COA and handling documentation.",
         "Confirm bag size, loading method, and shipment requirements."
       ],
-      "packing": "The profile lists 25 kg or 50 kg PP bags and 1 MT jumbo bags. Confirm the final bag specification and handling arrangements.",
+      "packing": "The profile lists 25 kg and 50 kg polypropylene (PP) bags and 1 MT jumbo bags. Specify bag size and handling requirements when requesting a quote.",
       "questions": [
         "Lumps, granules, powder, or pastilles?",
         "Which chemical acceptance parameters?",
@@ -388,7 +389,7 @@ window.RGE_DATA = {
       "facts": [
         [
           "Physical forms",
-          "Lump · Granular · Powder"
+          "Lump · Granular · Powder · Pastilles"
         ],
         [
           "Pack options",
@@ -429,7 +430,7 @@ window.RGE_DATA = {
         "en": "INDONESIA · NATURAL PALM MIDRIB"
       },
       "description": {
-        "en": "Natural palm midribs, sorted, dried, and bundled for your requirements."
+        "en": "Indonesian sapu lidi made from natural areca palm midribs for household sweeping, broom making and handicrafts."
       },
       "tag": {
         "en": "Length 90–120 cm"
@@ -466,13 +467,14 @@ window.RGE_DATA = {
         "en": "Company-provided specifications. Size, finished form, and compressed packaging are confirmed according to buyer requirements and loading plans."
       },
       "story": [
-        "Natural palm brooms are made from selected palm-leaf midribs that are dried, sorted, and tied into a practical cleaning product. The portfolio includes natural bundles, finished brooms with handles, and compressed export-bale options.",
-        "Buyers can discuss length, finished form, bundle configuration, and packing around their market or manufacturing needs. The attached video shows finished broom bundles in storage. Confirm the exact product construction, dimensions, cleanliness, and loading plan with the team."
+        "Traditional Indonesian sapu lidi are made from mature areca palm midribs. The midribs are dried in the sun, cleaned, sorted and tied by hand. The range includes natural bundles and finished brooms with wooden handles.",
+        "For a quote, specify whether you need tied bundles or finished brooms, along with the length and quantity. Confirm bundle dimensions and the loading plan with the team."
       ],
       "applications": [
-        "Home & garden cleaning",
+        "Home cleaning",
+        "Garden and yard sweeping",
         "Broom manufacturing",
-        "Natural-fiber products"
+        "Handicrafts"
       ],
       "steps": [
         "Select a natural bundle or finished broom form.",
@@ -480,7 +482,7 @@ window.RGE_DATA = {
         "Confirm tying, handle, and bundle requirements.",
         "Discuss compressed packing and the container-loading plan."
       ],
-      "packing": "The profile lists pressed bundles of 40–50 kg and export-bale options. This is a packing configuration, not the weight of an individual broom.",
+      "packing": "Pressed bundles are listed at 40–50 kg each. Compressed export bales are used for container loading.",
       "questions": [
         "Natural bundle or a finished broom?",
         "Which length and handle configuration?",
@@ -527,7 +529,7 @@ window.RGE_DATA = {
         "en": "INDONESIA · ALEURITES MOLUCCANUS"
       },
       "description": {
-        "en": "Selected candlenuts with clean kernels for spice and oil-processing needs."
+        "en": "Indonesian candlenut, or kemiri, for seasoning, thickening in Indonesian cooking and producing candlenut oil for cosmetics."
       },
       "tag": {
         "en": "Whole nuts · Shelled kernels"
@@ -561,16 +563,16 @@ window.RGE_DATA = {
         ]
       },
       "note": {
-        "en": "Company-provided specifications, subject to batch verification. Visuals are taken from the candlenut section of the profile; this product is candlenut, not almond or another nut species."
+        "en": "Confirm these company specifications for the batch and form you order."
       },
       "story": [
-        "Indonesian candlenut, Aleurites moluccanus, is offered for spice and oil-processing needs. Buyers can discuss whole nuts, shelled kernels, cleanliness, moisture, and pack format around their production requirements.",
-        "The company profile describes clean white meat with no rancid smell and lists a moisture target below 8%. These are company-provided specifications that require confirmation for the ordered batch. The photographs here are profile references, while the short product video is a clearly labeled photo-based presentation."
+        "Indonesian candlenut (Aleurites moluccanus), also called kemiri, is offered as whole nuts and shelled kernels. The white kernels are used to season and thicken dishes in Indonesian cooking and to produce candlenut oil for cosmetics.",
+        "For a quote, specify the form and packing you need. The profile lists a moisture target below 8%. Confirm moisture and kernel condition for your batch."
       ],
       "applications": [
-        "Spice ingredients",
-        "Candlenut oil processing",
-        "Ingredient manufacturing"
+        "Spice and seasoning",
+        "Thickening in Indonesian cooking",
+        "Candlenut oil for cosmetics"
       ],
       "steps": [
         "Specify whole nuts or shelled kernels.",
@@ -578,7 +580,7 @@ window.RGE_DATA = {
         "Evaluate a sample and final batch quality.",
         "Confirm PP-bag or vacuum packaging and destination."
       ],
-      "packing": "The profile lists 25 kg PP bags and a vacuum option. Confirm the preferred form, pack configuration, and labeling before purchase.",
+      "packing": "The profile lists 25 kg polypropylene (PP) bags and a vacuum packing option. Specify your preferred packing and labeling when requesting a quote.",
       "questions": [
         "Whole nuts or shelled kernels?",
         "Which moisture and appearance criteria?",
@@ -791,8 +793,8 @@ window.RGE_DATA.productPages = {
     slug: 'premium-vanilla-beans',
     title: 'Premium Vanilla Beans',
     label: 'Vanilla',
-    summary: 'Indonesian vanilla with a sweet aroma for food, extracts and fragrance.',
-    subtitle: 'Indonesian vanilla for food, extracts and fragrance, with gourmet and extraction grades available.',
+    summary: 'Indonesian Vanilla planifolia in Gourmet Grade A and Extract Grade B.',
+    subtitle: 'Indonesian vanilla beans with a rich, sweet aroma for food, beverages, extracts, fragrances and cosmetics.',
     highlight: 'Gourmet Grade A and Extract Grade B',
     hero: 'vanilla-grove',
     gallery: [
@@ -801,17 +803,17 @@ window.RGE_DATA.productPages = {
       ['assets/vanilla.webp', 'Cured beans from the company profile']
     ],
     benefits: [
-      ['leaf', 'Sweet, rich aroma', 'Aromatic beans for food, extracts and fragrance.'],
-      ['check', 'Two grade options', 'Choose gourmet beans or an extraction grade.'],
-      ['box', 'Vacuum packing', 'The company profile lists 1 kg and 5 kg packs.']
+      ['leaf', 'Rich, sweet aroma', 'For flavoring food and beverages or use in fragrances and cosmetics.'],
+      ['check', 'Two grades', 'Choose Gourmet Grade A or Extract Grade B.'],
+      ['box', 'Vacuum packing', 'The profile lists 1 kg and 5 kg packs in cartons.']
     ]
   },
   coffee: {
     slug: 'robusta-coffee',
     title: 'Indonesian Robusta Coffee',
     label: 'Robusta Coffee',
-    summary: 'Full-bodied Indonesian Robusta for blends, espresso and instant coffee.',
-    subtitle: 'Full-bodied Robusta with a bold character and chocolate notes for blends and industrial coffee processing.',
+    summary: 'Indonesian green Robusta for espresso blends and instant coffee.',
+    subtitle: 'Green Robusta beans with a full body and chocolate notes for espresso blends and instant coffee.',
     highlight: 'Grade 1 · Screen size 16–18',
     hero: 'coffee-hills',
     gallery: [
@@ -820,17 +822,17 @@ window.RGE_DATA.productPages = {
       ['assets/media/coffee-beans-closeup-photo-2.webp', 'Green coffee beans from the supplied footage']
     ],
     benefits: [
-      ['leaf', 'Full-bodied character', 'A bold profile for espresso and other coffee blends.'],
-      ['check', 'Screen size selection', 'Size 16–18 is listed in the company profile.'],
-      ['box', 'Choice of processing', 'Discuss washed, natural or honey processing when ordering.']
+      ['leaf', 'Bold flavor', 'Robusta brings body and chocolate notes to espresso blends.'],
+      ['check', 'Grade and screen size', 'The profile lists Grade 1 and screen sizes 16–18.'],
+      ['box', 'Three processing options', 'Choose washed, natural or honey processing.']
     ]
   },
   carbon: {
     slug: 'activated-carbon',
     title: 'Activated Carbon',
     label: 'Activated Carbon',
-    summary: 'Porous adsorbent for water treatment, gas filtration and industrial uses.',
-    subtitle: 'A porous adsorbent for water treatment, air and gas filtration, and industrial applications.',
+    summary: 'Granular, powdered and pelletized carbon for filtration and industrial adsorption.',
+    subtitle: 'Porous activated carbon for water purification, air and gas filtration, and industrial adsorption.',
     highlight: 'Granular, powder and pellet',
     hero: 'coconut-plantation',
     feature: ['carbon-and-shell', 'Black activated carbon granules beside coconut shells in a reference image'],
@@ -840,17 +842,17 @@ window.RGE_DATA.productPages = {
       ['assets/media/carbon-pellet.webp', 'Pelletized activated carbon']
     ],
     benefits: [
-      ['flask', 'Adsorption performance', 'Specify the target contaminants and operating conditions.'],
-      ['box', 'Three physical forms', 'Select the particle size and form for your process.'],
-      ['document', 'Sample analysis available', 'Review the listed results and request the relevant batch COA.']
+      ['flask', 'Liquid and gas treatment', 'Adsorbs impurities and odors from water, air and other gases.'],
+      ['box', 'Three physical forms', 'Choose granules, fine powder or pellets for your application.'],
+      ['document', 'Laboratory sample results', 'The tested sample had an iodine number of 1,145 mg/g.']
     ]
   },
   sulfur: {
     slug: 'natural-sulfur',
     title: 'Industrial Sulfur',
     label: 'Sulfur',
-    summary: 'Industrial sulfur in lump, granular, powder and pastille forms.',
-    subtitle: 'Sulfur in several physical forms for agriculture, chemical processing and manufacturing.',
+    summary: 'Sulfur lumps, granules, powder and pastilles for industrial and agricultural use.',
+    subtitle: 'Industrial sulfur for chemical processing, rubber vulcanization and fertilizer production.',
     highlight: '99.92% total sulfur in the tested sample',
     hero: 'sulfur-crater',
     feature: ['card-sulfur', 'Yellow sulfur powder on a pale surface'],
@@ -860,18 +862,18 @@ window.RGE_DATA.productPages = {
       ['assets/editorial/sulfur-powder.webp', 'Yellow sulfur powder in a reference image']
     ],
     benefits: [
-      ['check', 'Tested sample', 'The profile records 99.92% total sulfur for one tested sample.'],
-      ['box', 'Several physical forms', 'Choose lump, granular, powder or pastille according to your process.'],
-      ['ship', 'Bulk packing options', 'Discuss polypropylene bags or 1 MT jumbo bags.']
+      ['check', 'Tested sample', 'SUCOFINDO reported 99.92% total sulfur in one sample.'],
+      ['box', 'Four physical forms', 'Choose lumps, granules, powder or pastilles.'],
+      ['ship', 'Bulk packing options', 'The profile lists 25 kg and 50 kg PP bags and 1 MT jumbo bags.']
     ]
   },
   broom: {
     slug: 'natural-palm-brooms',
     title: 'Natural Palm Brooms',
     label: 'Palm Broomstick',
-    summary: 'Hand-tied palm midrib brooms for home, garden and outdoor cleaning.',
-    subtitle: 'Traditional hand-tied brooms made from palm midribs for home and outdoor cleaning.',
-    highlight: 'Handcrafted from natural palm midribs',
+    summary: 'Areca palm midribs in tied bundles or finished brooms with wooden handles.',
+    subtitle: 'Traditional Indonesian sapu lidi for sweeping homes, gardens and yards.',
+    highlight: 'Tied by hand from natural areca palm midribs',
     hero: 'broom-palm',
     gallery: [
       ['assets/editorial/broom-fibers.webp', 'Close-up of dried palm midribs'],
@@ -879,17 +881,17 @@ window.RGE_DATA.productPages = {
       ['assets/media/palm-broom-bundles-photo-1.webp', 'Finished palm broom bundles from the supplied footage']
     ],
     benefits: [
-      ['leaf', 'Natural palm midribs', 'Palm leaf midribs are dried, sorted and hand-tied.'],
-      ['check', 'Practical for daily sweeping', 'Strong, flexible bristles for homes and gardens.'],
-      ['box', 'Several bundle formats', 'Natural bundles, handles and pressed export bales are available to discuss.']
+      ['leaf', 'Flexible palm midribs', 'Lightweight brooms for everyday home and garden sweeping.'],
+      ['check', 'Four lengths', 'Choose 90, 100, 110 or 120 cm.'],
+      ['box', 'Compressed export packing', 'The profile lists pressed bundles of 40–50 kg.']
     ]
   },
   candlenut: {
     slug: 'candlenut',
     title: 'Premium Dried Candlenut',
     label: 'Candlenut',
-    summary: 'Indonesian candlenut for traditional recipes and oil processing.',
-    subtitle: 'Whole candlenuts and shelled kernels for culinary and candlenut oil applications.',
+    summary: 'Whole candlenuts and shelled kernels for cooking and oil production.',
+    subtitle: 'Indonesian candlenuts for seasoning, thickening dishes and producing oil for cosmetics.',
     highlight: 'Indonesian origin · Whole nuts and shelled kernels',
     hero: 'candlenut-trees',
     feature: ['candlenut-bowl', 'A wooden bowl of candlenut kernels beside nuts in their shells'],
@@ -899,9 +901,9 @@ window.RGE_DATA.productPages = {
       ['assets/editorial/candlenut-oil.webp', 'Reference image of candlenut oil']
     ],
     benefits: [
-      ['leaf', 'Culinary ingredient', 'Used in spice pastes, sauces and traditional recipes.'],
-      ['flask', 'Oil processing', 'Discuss kernel form and moisture for the intended process.'],
-      ['box', 'Packing options', 'The profile lists 25 kg polypropylene bags and a vacuum option.']
+      ['leaf', 'Culinary ingredient', 'Used as a spice and thickener in Indonesian cooking.'],
+      ['flask', 'Oil for cosmetics', 'The company profile describes candlenut kernels as high in oil.'],
+      ['box', 'Packing options', 'Choose 25 kg polypropylene bags or ask for vacuum packing.']
     ]
   }
 };
