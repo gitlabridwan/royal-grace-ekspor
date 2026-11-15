@@ -67,7 +67,7 @@ function syncSelection() {
 function initializeNavigation() {
   const toggle = $('#menuToggle');
   const nav = $('#siteNav');
-  const mobile = matchMedia('(max-width: 790px)');
+  const mobile = matchMedia('(max-width: 900px)');
   function setMenu(open) {
     nav.hidden = mobile.matches && !open;
     toggle.hidden = !mobile.matches;
@@ -140,9 +140,10 @@ function initializeCatalog() {
     if (event.key !== '/' || event.altKey || event.ctrlKey || event.metaKey || $('dialog[open]')) return;
     if (event.target.closest?.('input, textarea, select, [contenteditable]')) return;
     event.preventDefault();
+    $('#catalogFind').open = true;
     search.focus();
   });
-  $('#catalogControls').hidden = false;
+  $('#catalogFind').hidden = false;
 }
 
 const focusBeforeOpen = new WeakMap();
@@ -165,10 +166,27 @@ function initializeDialogs() {
       }
     });
     dialog.addEventListener('close', () => {
+      $$('video', dialog).forEach(video => video.pause());
       const previous = focusBeforeOpen.get(dialog);
       if (previous?.isConnected) previous.focus({ preventScroll: true });
     });
   });
+
+  const productLinks = $$('[data-product-dialog]');
+  if (!productLinks.length) return;
+
+  const openLinkedDialog = link => openDialog(document.getElementById(link.dataset.productDialog));
+  const showFromHash = () => {
+    const link = productLinks.find(candidate => candidate.hash === location.hash);
+    if (link) openLinkedDialog(link);
+  };
+  productLinks.forEach(link => link.addEventListener('click', event => {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    openLinkedDialog(link);
+  }));
+  showFromHash();
+  window.addEventListener('hashchange', showFromHash);
 }
 
 function initializeGallery() {
@@ -218,15 +236,6 @@ function initializeVideo() {
         if (card.hidden) $('video', card).pause();
       });
     }));
-  }
-  const detail = $('details#media');
-  if (detail) {
-    const openIfLinked = () => { if (location.hash === '#media') detail.open = true; };
-    openIfLinked();
-    window.addEventListener('hashchange', openIfLinked);
-    detail.addEventListener('toggle', () => {
-      if (!detail.open) $$('video', detail).forEach(video => video.pause());
-    });
   }
   document.addEventListener('play', event => {
     if (event.target.tagName !== 'VIDEO') return;
