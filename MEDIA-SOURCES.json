@@ -25,16 +25,41 @@
       "original": "WhatsApp Video 2026-11-08 at 13.13.28 (3).mp4"
     },
     {
+      "id": "carbon-equipment-operation",
+      "product": "carbon",
+      "title": "Equipment in operation",
+      "src": "assets/media/carbon-equipment-operation.mp4",
+      "poster": "assets/media/carbon-equipment-operation-poster.webp",
+      "track": "assets/media/carbon-equipment-operation.vtt",
+      "duration": 11.0,
+      "type": "supplied",
+      "size_mib": 0.85,
+      "original": "WhatsApp Video 2026-11-08 at 13.18.01 (1).mp4",
+      "portrait": true
+    },
+    {
+      "id": "carbon-machinery-workshop",
+      "product": "carbon",
+      "title": "Machinery workshop",
+      "src": "assets/media/carbon-machinery-workshop.mp4",
+      "poster": "assets/media/carbon-machinery-workshop-poster.webp",
+      "track": "assets/media/carbon-machinery-workshop.vtt",
+      "duration": 15.02,
+      "type": "supplied",
+      "size_mib": 3.12,
+      "original": "WhatsApp Video 2026-11-08 at 13.20.37.mp4"
+    },
+    {
       "id": "production-equipment",
-      "product": "production",
-      "title": "Production equipment \u2014 supplied footage",
+      "product": "carbon",
+      "title": "Processing equipment walkthrough",
       "src": "assets/media/production-equipment.mp4",
       "poster": "assets/media/production-equipment-poster.webp",
       "track": "assets/media/production-equipment.vtt",
       "duration": 23.3,
       "type": "supplied",
-      "size_mib": 1.19,
-      "original": "WhatsApp Video 2026-11-08 at 13.20.38.mp4"
+      "size_mib": 4.82,
+      "original": "WhatsApp Video 2026-11-08 at 13.20.38 (1).mp4"
     },
     {
       "id": "sulfur-granules",
@@ -110,9 +135,9 @@
     }
   ],
   "notes": [
-    "Supplied clips are assigned by visual content.",
-    "Production equipment footage is kept separate because the specific process and product could not be established.",
-    "Carbon and candlenut videos are labeled photo-based presentations, not original footage.",
+    "Supplied clips are assigned to their product pages.",
+    "The three clips supplied for Activated Carbon include the footage previously listed as Production equipment.",
+    "The carbon and candlenut photo presentations are labeled separately from the supplied footage.",
     "Video appearance does not verify grade, purity, certification or shipment specifications."
   ]
 }

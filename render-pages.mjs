@@ -11,7 +11,8 @@ const name = 'PT Royal Grace Exportindo';
 const phone = `https://wa.me/${company.whatsapp}`;
 const email = `mailto:${company.email}`;
 const profile = 'assets/royal-grace-company-profile.pdf';
-const mark = 'assets/editorial/royal-grace-mark.webp';
+const mark = 'assets/editorial/royal-grace-logo.webp';
+const favicon = 'assets/editorial/royal-grace-icon.png';
 const landscape = 'assets/editorial/rice-terraces.webp';
 const escape = value => String(value).replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -55,7 +56,7 @@ ${Object.entries(icons).map(([key, paths]) => `  <symbol id="i-${key}" viewBox="
 
 function brand(base, footer = false) {
   return `<a class="brand${footer ? ' footer-brand' : ''}" href="${base}" aria-label="${name} home">
-    ${photo(base, mark, '', 'width="62" height="72"')}
+    ${photo(base, mark, '', 'width="68" height="92"')}
     <span><strong>${name}</strong><span class="brand-line">${footer ? 'Royal in Quality. Graceful in Service.' : 'Export · Import · Commodities'}</span></span>
   </a>`;
 }
@@ -134,7 +135,7 @@ function shell({ path, base, page, title, description, main, social = landscape,
   <meta property="og:description" content="${escape(description)}">
   <meta property="og:image" content="${base}${social}">
   <meta property="og:type" content="website">
-  <link rel="icon" href="${base}${mark}" type="image/webp">
+  <link rel="icon" href="${base}${favicon}" type="image/png" sizes="192x192">
   <link rel="manifest" href="${base}manifest.webmanifest">
   <link rel="stylesheet" href="${base}style.css">
   ${schema}
@@ -325,7 +326,7 @@ function productDetail(base, p) {
       <div><h2>What to Include in Your Inquiry</h2><ul>${p.questions.map(question => `<li>${escape(question)}</li>`).join('')}</ul></div>
       <div><h2>From Requirements to Selection</h2><ol>${p.steps.map(step => `<li>${escape(step)}</li>`).join('')}</ol></div></div>
     </details>
-    <details id="media"><summary>More Photos &amp; Videos <small>${p.videoIds.length} ${p.videoIds.length === 1 ? 'video' : 'videos'}</small></summary>
+    <details id="media"${view.openMedia ? ' open' : ''}><summary>More Photos &amp; Videos <small>${p.videoIds.length} ${p.videoIds.length === 1 ? 'video' : 'videos'}</small></summary>
       ${gallery(base, p.photos)}
       <div class="video-grid product-videos">${p.videoIds.map(id => videoCard(base, videos.find(video => video.id === id))).join('')}</div>
     </details>
@@ -348,7 +349,7 @@ function videoCard(base, video, linkToProduct = false) {
   const product = products.find(p => p.id === video.product);
   const isPresentation = video.type === 'photo-presentation';
   const note = video.product === 'production' ? 'Ask the team for details about the process shown in this clip.' : '';
-  return `<figure class="video-card" data-video-product="${video.product}">
+  return `<figure class="video-card${video.portrait ? ' video-card-portrait' : ''}" data-video-product="${video.product}">
     <video controls playsinline preload="none" poster="${base}${video.poster}" aria-label="${escape(video.title)}">
       <source src="${base}${video.src}" type="video/mp4"><track kind="descriptions" src="${base}${video.track}" srclang="en" label="English visual notes">
       <a href="${base}${video.src}">Open the video file</a>

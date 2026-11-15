@@ -312,6 +312,9 @@ window.RGE_DATA = {
         ]
       ],
       "videoIds": [
+        "carbon-equipment-operation",
+        "carbon-machinery-workshop",
+        "production-equipment",
         "carbon-photo-presentation"
       ],
       "cardImage": "assets/carbon.webp"
@@ -701,16 +704,41 @@ window.RGE_DATA = {
       "original": "WhatsApp Video 2026-11-08 at 13.13.28 (3).mp4"
     },
     {
+      "id": "carbon-equipment-operation",
+      "product": "carbon",
+      "title": "Equipment in operation",
+      "src": "assets/media/carbon-equipment-operation.mp4",
+      "poster": "assets/media/carbon-equipment-operation-poster.webp",
+      "track": "assets/media/carbon-equipment-operation.vtt",
+      "duration": 11.0,
+      "type": "supplied",
+      "size_mib": 0.85,
+      "original": "WhatsApp Video 2026-11-08 at 13.18.01 (1).mp4",
+      "portrait": true
+    },
+    {
+      "id": "carbon-machinery-workshop",
+      "product": "carbon",
+      "title": "Machinery workshop",
+      "src": "assets/media/carbon-machinery-workshop.mp4",
+      "poster": "assets/media/carbon-machinery-workshop-poster.webp",
+      "track": "assets/media/carbon-machinery-workshop.vtt",
+      "duration": 15.02,
+      "type": "supplied",
+      "size_mib": 3.12,
+      "original": "WhatsApp Video 2026-11-08 at 13.20.37.mp4"
+    },
+    {
       "id": "production-equipment",
-      "product": "production",
-      "title": "Production equipment — supplied footage",
+      "product": "carbon",
+      "title": "Processing equipment walkthrough",
       "src": "assets/media/production-equipment.mp4",
       "poster": "assets/media/production-equipment-poster.webp",
       "track": "assets/media/production-equipment.vtt",
       "duration": 23.3,
       "type": "supplied",
-      "size_mib": 1.19,
-      "original": "WhatsApp Video 2026-11-08 at 13.20.38.mp4"
+      "size_mib": 4.82,
+      "original": "WhatsApp Video 2026-11-08 at 13.20.38 (1).mp4"
     },
     {
       "id": "sulfur-granules",
@@ -829,6 +857,7 @@ window.RGE_DATA.productPages = {
   },
   carbon: {
     slug: 'activated-carbon',
+    openMedia: true,
     title: 'Activated Carbon',
     label: 'Activated Carbon',
     summary: 'Granular, powdered and pelletized carbon for filtration and industrial adsorption.',

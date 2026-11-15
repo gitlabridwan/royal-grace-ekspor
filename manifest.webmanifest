@@ -7,7 +7,7 @@
   "background_color": "#f8f3e6",
   "theme_color": "#163b2c",
   "icons": [
-    {"src": "assets/editorial/royal-grace-mark.webp", "sizes": "68x92", "type": "image/webp", "purpose": "any"}
+    {"src": "assets/editorial/royal-grace-icon.png", "sizes": "192x192", "type": "image/png", "purpose": "any"}
   ],
   "scope": "./"
 }

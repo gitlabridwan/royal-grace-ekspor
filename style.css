@@ -61,7 +61,7 @@ p { text-wrap: pretty; }
 .site-header { position: relative; z-index: 2; background: var(--cream); box-shadow: 0 1px 0 #9b814638; }
 .header-inner { min-height: 96px; display: flex; align-items: center; justify-content: space-between; gap: clamp(14px, 2.1vw, 32px); }
 .brand { display: inline-flex; align-items: center; gap: 14px; flex: none; align-self: center; }
-.brand img { width: 59px; max-height: 72px; object-fit: contain; }
+.brand img { width: 59px; height: auto; max-height: 72px; object-fit: contain; }
 .brand strong { display: block; font: 700 clamp(1.1rem, 2.05vw, 2rem)/1.06 var(--serif); letter-spacing: -.018em; text-transform: uppercase; }
 .brand-line { display: block; margin-top: 5px; color: var(--gold-text); font-size: .69rem; line-height: 1.15; font-weight: 750; letter-spacing: .22em; text-align: center; text-transform: uppercase; }
 .site-nav { display: flex; align-items: center; gap: clamp(12px, 1.45vw, 25px); margin-left: auto; }
@@ -510,6 +510,8 @@ legend { margin: 0 0 8px; padding: 0; font-weight: 750; }
   .buyer-content { grid-template-columns: 1fr; gap: 11px; }
   .quality-grid, .contact-links { grid-template-columns: 1fr; }
   .video-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .product-videos:has(.video-card-portrait) { grid-template-columns: minmax(0, 1fr); }
+  .product-videos .video-card-portrait video { aspect-ratio: 4 / 3; }
   .video-card figcaption, .insights-grid article > div { padding: 8px; }
   .video-card h3 { font-size: .83rem; }
   #inquiryForm { padding: 11px; }
