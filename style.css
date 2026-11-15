@@ -211,8 +211,18 @@ p { text-wrap: pretty; }
 .product-hero .btn { min-height: 44px; padding: 8px 12px; }
 .product-highlight { display: inline-flex; align-items: center; gap: 8px; color: var(--forest-dark); margin-top: 16px; font-size: .875rem; font-weight: 650; }
 .product-highlight .icon { width: 1.3em; height: 1.3em; }
-.product-hero-photo { min-width: 0; overflow: hidden; border: 1px solid #cfbf98; border-radius: 16px; background: var(--paper); box-shadow: var(--shadow); }
-.product-hero-photo img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+/* The image's intrinsic dimensions set the frame size within its grid column. */
+.product-hero-photo {
+  justify-self: center;
+  width: fit-content;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  border: 1px solid #cfbf98;
+  border-radius: 16px;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
 .product-content {
   display: grid;
   grid-template: "overview applications" auto "specifications benefits" 1fr "specifications gallery" auto / minmax(0, .99fr) minmax(0, 1.01fr);
@@ -420,7 +430,6 @@ legend { margin: 0 0 8px; padding: 0; font-weight: 750; }
   .home-sourcing-inner { grid-template-columns: minmax(0, 1fr); }
   .catalog .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; }
   .product-hero-inner { grid-template-columns: minmax(0, 1fr); padding-block: 32px; }
-  .product-hero-photo img { aspect-ratio: 16 / 9; }
   .product-content { gap: 12px; }
   .broom-content { grid-template: "overview overview" auto "specifications benefits" auto "applications gallery" 1fr / minmax(0, 1fr) minmax(0, 1fr); }
   .benefit-grid { grid-template-columns: 1fr; gap: 5px; }
@@ -492,7 +501,6 @@ legend { margin: 0 0 8px; padding: 0; font-weight: 750; }
   .product-hero-copy > p:not(.product-category, .product-highlight) { font-size: 1rem; }
   .product-hero .actions { gap: 8px; margin-top: 16px; }
   .product-hero .btn { font-size: .875rem; }
-  .product-hero-photo img { aspect-ratio: 16 / 10; }
   .product-content { display: flex; flex-direction: column; align-items: stretch; gap: 19px; padding-block: 16px 22px; }
   .spec-table { font-size: .82rem; }
   .spec-table th, .spec-table td { padding: 6px 8px; }
